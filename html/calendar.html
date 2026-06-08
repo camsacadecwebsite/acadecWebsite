@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- HEADING -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acadec Hub - Dashboard</title>
+    <link rel="stylesheet" href="../css/main.css">
+</head>
+
+<body>
+    <!-- NAVIGATION BAR -->
+     <nav class="navigationBar">
+        <ul class="navigationLists">
+
+            <!-- Pages -->
+            <li><a href="index.html">Dashboard</a></li> <!-- Current page -->
+
+            <li class="dropdown">
+                <a href="#" class="dropdownButton">Subjects ▾</a>
+                <div class="dropdownSubjects">
+                    <a href="subjects/art.html">Art</a>
+                    <a href="subjects/econ.html">Economics</a>
+                    <a href="subjects/lit.html">Literature</a>
+                    <a href="subjects/math.html">Math</a>
+                    <a href="subjects/music.html">Music</a>
+                    <a href="subjects/sci.html">Science</a>
+                    <a href="subjects/socsci.html">Social Science</a>
+                </div>
+            </li>
+
+            <!-- Other pages -->
+            <li><a href="events.html">Events</a></li>
+            <li><a href="calendar.html" class="onThisPage">Calendar</a></li>
+            <li><a href="check-in.html">Weekly Check-Ins</a></li>
+            <li><a href="analytics.html">Analytics</a></li>
+            <li><a href="quickLinks.html">Quick Links</a></li>
+        </ul>
+     </nav>
+
+     <main>
+        <div class="mainContent">
+            <!-- Heading -->
+            <section class="subjectHeading">
+                <h2>Calendar</h2>
+                <p>Insert some stuff about the calendar</p>
+            </section>
+
+            <section class="calendar">
+                <iframe src="https://calendar.google.com/calendar/embed?src=76a5cd554ac36a22febda2f13eaffd9edf4e929ef1d3cf1abf450a8b866b98ee%40group.calendar.google.com&ctz=America%2FLos_Angeles" style="border: 0" width="100%" height="500" frameborder="0" scrolling="no"></iframe>
+            </section>
+
+        </div>
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <h2>Weekly Check-in</h2>
+
+            <!-- Sidebar Cards -->
+            <section class="checkinSidebarCard"> <!-- Check-in Card -->
+                <h3>Pending</h3>
+                <p class="sidebarDescription">Week ending November 6th, 2100</p>
+                <a href="check-in.html" class="checkInButton">CHECK-IN</a>
+
+            </section>
+            
+            <!-- Events Cards -->
+            <section class="eventSidebarCard">
+                <h3>Insert Event 1</h3>
+                <p class="sidebarDescription">We have a scrimmage this day, please show up :D</p>
+            </section>
+
+            <section class="eventSidebarCard">
+                <h3>Insert Event 2</h3>
+                <p class="sidebarDescription">We have a team bonding activity this day, please show up :D</p>
+            </section>
+        </aside>
+     </main>
+
+     
+
+    <!-- Connects JavaScript file -->
+     <script src="../js/main.js"></script>
+
+</body>
