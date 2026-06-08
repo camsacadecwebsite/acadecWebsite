@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- HEADING -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acadec Hub - Dashboard</title>
+    <link rel="stylesheet" href="../css/main.css">
+</head>
+
+<body>
+    <!-- NAVIGATION BAR -->
+     <nav class="navigationBar">
+        <ul class="navigationLists">
+
+            <!-- Pages -->
+            <li><a href="index.html" class="onThisPage">Dashboard</a></li> <!-- Current page -->
+
+            <li class="dropdown">
+                <a href="#" class="dropdownButton">Subjects ▾</a>
+                <div class="dropdownSubjects">
+                    <a href="subjects/art.html">Art</a>
+                    <a href="subjects/econ.html">Economics</a>
+                    <a href="subjects/lit.html">Literature</a>
+                    <a href="subjects/math.html">Math</a>
+                    <a href="subjects/music.html">Music</a>
+                    <a href="subjects/sci.html">Science</a>
+                    <a href="subjects/socsci.html">Social Science</a>
+                </div>
+            </li>
+
+            <!-- Other pages -->
+            <li><a href="events.html">Events</a></li>
+            <li><a href="calendar.html">Calendar</a></li>
+            <li><a href="check-in.html">Weekly Check-Ins</a></li>
+            <li><a href="analytics.html">Analytics</a></li>
+            <li><a href="quickLinks.html">Quick Links</a></li>
+        </ul>
+     </nav>
+
+     <!-- MAIN STUFF -->
+     <main>
+
+        <section class="mainContent"> <!-- Main content class -->
+
+            <!-- Overall Score Tracker -->
+            <div class="teamGoalMarker">
+                <h3>Team Goal</h3>
+                <p class="goalMarkerText">Current Progress: <b>32,000 / 42,000</b> points</p>
+                <p><small>Next target: 42,000</small></p>
+            </div>
+
+            <!-- ANNOUNCEMENTS -->
+            <section class="announcements">
+                <h2>Announcements</h2>
+
+                <!-- Announcement Cards -->
+                <div class="announcementCard">
+                    <h4>Insert Announcement 1</h4>
+                    <p>Insert details on Announcement 1 :D</p>
+                    <small>Date: 13/32/2100</small>
+                </div>
+
+                <div class="announcementCard">
+                    <h4>Insert Announcement 2</h4>
+                    <p>Insert details on Announcement 2 :D</p>
+                    <small>Date: 13/32/2100</small>
+                </div>
+
+                <div class="announcementCard">
+                    <h4>Insert Announcement 3</h4>
+                    <p>Insert details on Announcement 3 :D</p>
+                    <small>Date: 13/32/2100</small>
+                </div>
+
+            </section>
+
+            <!-- SUGGESTED THINGS TO DO -->
+             <section class="suggestionBoard">
+                <h2>Suggested Study Plan</h2>
+
+                <div class="suggestion-cards-container">
+                    <section class="suggestionCard">
+                        <h3>Music Section 1</h3>
+                        <a href="music.html" class="suggestionButton">Go to Music</a>
+                    </section>
+
+                    <section class="suggestionCard">
+                        <h3>Art Section 2</h3>
+                        <a href="art.html" class="suggestionButton">Go to Art</a>
+                    </section>
+
+                    <section class="suggestionCard">
+                        <h3>Diagnostic Test</h3>
+                        <a href="tests.html" class="suggestionButton">Go to Diagnostic Test</a>
+                    </section>
+                </div>
+            </section>
+        </section>
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <h2>Weekly Check-in</h2>
+
+            <!-- Sidebar Cards -->
+            <section class="checkinSidebarCard"> <!-- Check-in Card -->
+                <h3>Pending</h3>
+                <p class="sidebarDescription">Week ending November 6th, 2100</p>
+                <a href="check-in.html" class="checkInButton">CHECK-IN</a>
+
+            </section>
+            
+            <!-- Events Cards -->
+            <section class="eventSidebarCard">
+                <h3>Insert Event 1</h3>
+                <p class="sidebarDescription">We have a scrimmage this day, please show up :D</p>
+            </section>
+
+            <section class="eventSidebarCard">
+                <h3>Insert Event 2</h3>
+                <p class="sidebarDescription">We have a team bonding activity this day, please show up :D</p>
+            </section>
+        </aside>
+
+
+     </main>
+
+    <!-- Connects JavaScript file -->
+     <script src="../js/main.js"></script>
+
+
+</body>
+
+

@@ -1,0 +1,456 @@
+:root {
+    /* General Main Colors */
+    --backgroundColor: #ececec;
+    --cardBackgroundColor: #ffffff;
+    --textMainColor: #1c1c1c;
+    --textSecondaryColor: #4d4d4d;
+    --blueColor: #2e7fe8;
+    --hoverBlueColor: #0c5fcb;
+    --borderColor: #cfd4de;
+    --greenBackground: #31984f;
+    --greenText: #137333;
+}
+
+/* General Reset stuff */
+* {
+    box-sizing: border-box;
+    margin: 0; padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: var(--backgroundColor);
+    color: var(--textMainColor);
+    padding: 80px 24px 24px 24px; /* 80 on top, 24 on other sides */
+} 
+
+/* General Navigation Bar */
+.navigationBar {
+    position: fixed; 
+    top: 0; 
+    left: 0;                           
+    width: 100%; 
+    height: 60px;                      
+    background-color: var(--cardBackgroundColor); 
+    border-bottom: 1px solid var(--borderColor); 
+    display: flex; 
+    justify-content: space-between; /* Space distribution is equal */
+    align-items: center;               
+    padding: 0 2rem; /* 2rem on both left and right */
+    z-index: 1000;
+}
+
+/* Navigation List */
+.navigationLists {
+    display: flex;
+    list-style: none; /* No bullet points */
+    align-items: center;
+    margin: 0; 
+    padding: 0; 
+    gap: 1.5rem; /* 1.5rem gap between each subject */
+}
+
+/* Navigation List Link Aesthetics */
+.navigationLists a {
+    color: var(--textSecondaryColor);
+    font-weight: 500; 
+    font-size: 0.9rem; 
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+/* Hovering over certain stuff on navigation bar */
+.navigationLists a:hover {
+    color: var(--hoverBlueColor);
+}
+
+/* Dropdown Menu Stuff */
+.dropdown {
+    position: relative; 
+    display: inline-block; /* Next to others on same line, but has block element properties */
+}
+
+.dropdownButton { /* Detects that cursor is the one interacting */
+    cursor: pointer;
+}
+
+/* Makes it so that the dropdown menu doesn't immediately go away */
+.dropdownSubjects::before {
+    content: '';
+    position: absolute;
+    top: -25px; 
+    left: 0;
+    width: 100%; 
+    height: 30px;
+    background: transparent;
+}
+
+/* Dropdown Subjects (Art, Econ, Lit, etc) */
+.dropdownSubjects {
+    display: none; 
+    position: absolute;
+    background: var(--cardBackgroundColor);
+    min-width: 200px;
+    top: 39px; 
+    left: 0;
+}
+
+/* Dropdown Subject Text */
+.dropdownSubjects a {
+    display: block; /* Line breaks */
+    color: var(--textMainColor);
+    padding: 10px 16px;
+}
+
+/* Hovering over subjects */
+.dropdownSubjects a:hover {
+    background-color: var(--backgroundColor); 
+    color: var(--hoverBlueColor);
+}
+
+.dropdown:hover .dropdownSubjects {
+    display: block; /* Line breaks */
+}
+
+/* Main container */
+main {
+    display: grid; 
+    grid-template-columns: 2.75fr 1fr; /* 3:1 ratio of main vs sidebar */
+    gap: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+    align-items: start; /* Line up at top edge */
+}
+
+/* Left Content Column */
+.mainContent {
+    display: flex; 
+    flex-direction: column; /* Stacks vertically */
+    gap: 24px;
+}
+
+/* Main Heading */
+.mainContent h2 {
+    font-size: 1.5rem; 
+    font-weight: 600;
+    color: #111111;
+    margin-bottom: 16px;
+}
+
+/* Content Cards */
+.teamGoalMarker, .announcements, .suggestionBoard {
+    background: #ffffff;
+    border: 1px solid #eef1f4; 
+    border-radius: 12px;
+    padding: 24px;
+}
+
+/* Announcement Cards */
+.announcementCard, .quizlet {
+    background: #ffffff;
+    border-top: 1px solid #f0f2f5;
+    padding: 16px 0;
+}
+
+.announcementCard:first-of-type { /* Very first announcement card */
+    border-top: none; 
+    padding-top: 8px;
+}
+
+/* Small Heading for Announcement Cards */
+.announcementCard h4 { 
+    font-size: 1.1rem;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+}
+
+/* Regular text for Announcement Cards */
+.announcementCard p {
+    font-size: 0.95rem;
+    color: #666666;
+    margin-bottom: 8px;
+}
+
+/* Date/Time text for Announcement Cards */
+.announcementCard small {
+    color: #999999;
+    font-size: 0.8rem;
+}
+
+/* Suggestion Board */
+.suggestionBoard .suggestion-cards-container {
+    display: flex; 
+    gap: 16px;
+    margin-top: 16px;
+}
+
+/* Suggestion Cards */
+.suggestionCard {
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; /* Stacks vertically */
+    justify-content: space-between; /* Even space between things */
+    align-items: flex-start;
+    background-color: #fafbfc;
+    border: 1px solid #eef1f4; 
+    border-radius: 8px;
+    padding: 20px; 
+    min-height: 140px;
+}
+
+/* Suggestion Card Small Heading */
+.suggestionCard h3 {
+    font-size: 1.05rem;
+    color: #1a1a1a;
+    margin-bottom: 12px;
+}
+
+/* Suggestion Button */
+.suggestionButton {
+    background-color: #e8f0fe; 
+    color: #1a73e8;
+    text-align: center; 
+    margin-top: auto; /* Aligns button at base */
+    display: block; /* Line breaks */
+    text-align: center; 
+    font-weight: 600; 
+    font-size: 0.9rem; 
+    text-decoration: none;
+    padding: 12px; 
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+
+/* When hovering over suggestion button */
+.suggestionButton:hover {
+    background-color: #d2e3fc;
+}
+
+/* Sidebar Stuff */
+.sidebar {
+    display: flex; 
+    flex-direction: column; /* Stacks vertically */
+    gap: 16px; 
+    padding-top: 8px;
+}
+
+/* Sidebar Font */
+.sidebar > h2 {
+    font-size: 1.2rem; 
+    font-weight: 600;
+    color: #111111;
+    margin-bottom: 4px;
+}
+
+/* Sidebar Cards */
+.checkinSidebarCard, .eventSidebarCard, .practiceTestSidebarCard {
+    background: #ffffff;
+    border: 1px solid #eef1f4; 
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.practiceTestSidebarCard {
+    align-items: center;
+    border-left: 4px solid #1a73e8;
+}
+
+
+/* Practice Test Text Spacing */
+.practiceTestSidebarCard p {
+    line-height: 1.5;
+
+}
+
+/* Check-In Card Specifics */
+.checkinSidebarCard {
+    border-left: 4px solid #00ba70;
+}
+
+/* Check in Sidebar Card Header */
+.checkinSidebarCard h3 {
+    font-size: 1.1rem;
+    color: #111111;
+    display: flex; 
+    justify-content: space-between; /* Spaces evenly */
+    align-items: center;
+    width: 100%;
+}
+
+/* Practice Test Sidebar Card Header */
+.practiceTestSidebarCard h3 {
+    font-size: 1.1rem;
+    color: #111111;
+    display: flex; 
+    justify-content: space-between; /* Spaces evenly */
+    align-items: center;
+    width: 100%;
+
+}
+
+/* Tag Style for Check in Sidebar Card */
+.checkinSidebarCard h3::after {
+    content: 'Due';
+    font-size: 0.75rem; 
+    font-weight: 600;
+    background-color: #fff3e0; 
+    color: #f57c00;
+    padding: 2px 10px; 
+    border-radius: 12px; 
+}
+
+/* Sidebar Description */
+.sidebarDescription {
+    font-size: 0.9rem;
+    color: #666666;
+    margin: 12px 0 16px 0;
+}
+
+/* Check in Button */
+.checkInButton {
+    display: block; /* Line breaks */
+    text-align: center; 
+    background-color: #00ba70; 
+    color: #ffffff;
+    font-weight: 600; 
+    font-size: 0.9rem; 
+    text-decoration: none;
+    padding: 12px; 
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.practiceTestButton {
+    margin: 10px 0px
+}
+
+/* Check in Button Hovering Over */
+.checkInButton:hover {
+    background-color: #00a362;
+}
+
+/* Upcoming Event Widget Cards */
+.eventSidebarCard h3 {
+    font-size: 1rem; 
+    font-weight: 600;
+    color: #111111;
+    margin-bottom: 6px;
+}
+
+/* Sizing Stuff */
+@media (max-width: 900px) { /* If browser window = 900 pixels, grid is single column */
+    main {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) { /* If browser window = 600 pixels, everything is lined up */
+    .suggestionBoard .suggestion-cards-container {
+        flex-direction: column;
+    }
+}
+
+/* Subject Big Boxes */
+.subjectHeading, .notes, .quizletBlock, .gameBlock {
+    background: #ffffff;
+    border: 1px solid #eef1f4; 
+    border-radius: 12px;
+    padding: 24px;
+}
+
+/* Subject Big Boxes Font */
+.subjectHeading p {
+    font-size: 1.1rem;
+    color: #666666;
+    margin-bottom: 8px;
+    line-height: 1.0;
+}
+
+/* Subject Small Boxes */
+.unitStuff, .sectionText, .blooketKahootBlock {
+    background: #ffffffc7;
+    border: 1px solid #c7c7c7; 
+    border-radius: 12px;
+    padding: 0 !important;
+    margin: 14px;
+    overflow: hidden;
+}
+
+/* Gap between header for each note box and actual note links */
+.sectionText h3 {
+    background-color: #e8f0fe;
+    color: var(--blueColor);
+    padding: 12px 20px;
+    margin-bottom: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    border-bottom: 1px solid #cfd4de;
+}
+
+/* Gap between header for each note box and actual note links */
+.unitStuff h3 {
+    background-color: #e8f0fe;
+    color: var(--blueColor);
+    padding: 12px 20px;
+    margin-bottom: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    border-bottom: 1px solid #cfd4de;
+}
+
+.blooketKahootBlock h3 {
+    background-color: #e8f0fe;
+    color: var(--blueColor);
+    padding: 12px 20px;
+    margin-bottom: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    border-bottom: 1px solid #cfd4de;
+}
+
+/* Link Formatting Subjects */
+.noteLinkTitle {
+    font-size: 1rem;
+    line-height: 1.0;
+    white-space: nowrap;
+    float: left; /* Makes title go to left */
+    clear: left; /* New title starts on new line */
+}
+
+/* Formatting of box of the notes (resets everything) */
+.notesLink {
+   display: block;
+   overflow: hidden;
+   padding: 10px 20px;
+}
+
+/* Formatting links in notes box */
+.notesLink a {
+    float: right; /* Makes links go to the right */
+    text-align: right;
+    margin-left: 15px;
+    margin-bottom: 16px;
+    
+}
+
+/* Bolded line formatting */
+.notesLink br {
+    display: block !important;
+    clear: both;
+}
+
+/* Remove bottom spacing from each note box */
+.notesLink span:last-of-type ~ a {
+    margin-bottom: 0;
+}
+
+/* Gap between quizlet title and actual quizlet */
+.quizlet h3 {
+    margin-bottom: 10px;
+}
+
+/* Gap between actual quizlet and link */
+.quizletLink {
+    margin-top: 10px;
+}
