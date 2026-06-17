@@ -454,3 +454,117 @@ main {
 .quizletLink {
     margin-top: 10px;
 }
+
+/* Check in Section (NOT FORM) */
+.checkInFormAesthetics {
+    background: #ffffff;
+    border: 1px solid #eef1f4; 
+    border-radius: 12px;
+    padding: 24px;
+}
+
+/* Headings for Check */
+.checkInFormAesthetics h3 {
+    font-size: 1.05rem;
+    color: #1a1a1a;
+    margin-bottom: 15px;
+    padding-bottom: 3px;
+    padding-top: 15px;
+    border-top: 1px solid #f0f2f5;
+}
+
+
+.weeklyFormIndividualAspects h4 {
+    font-size: 1rem;
+    color: #1a1a1a;
+    padding-bottom: 10px;
+    padding-top: 3px;
+}
+
+.checkInFormAesthetics h3:first-of-type { /* Very first announcement card */
+    border-top: none;
+    padding-top: 4px;
+}
+
+.weeklyFormIndividualAspects {
+    margin-bottom: 10px;
+}
+
+/* Text field input on weekly check ins */
+.weeklyFormIndividualAspects input[type="text"] {
+    width: 100%;
+    max-width: 500px;
+    height: 40px;
+    padding: 12px;
+    border: 1px solid #cfd4de;
+    border-radius: 8px;
+    font-size: 0.95rem;
+}
+
+/* Adjustmenets to slider */
+.slider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 3px;
+}
+
+/* Adjustmenets to actual slider */
+.actualSlider {
+    appearance: none;
+    height: 6px;
+    background: #cacaca;
+    border-radius: 4px;
+    width: 250px;
+}
+
+/* Make slide ball big */
+.actualSlider::-webkit-slider-thumb {
+    width: 25px;
+    height: 25px;
+}
+
+/* Displaying number on slider */
+#hoursDisplayed, #artConfidenceDisplay, #econConfidenceDisplay, #litConfidenceDisplay, #mathConfidenceDisplay, #musicConfidenceDisplay, #sciConfidenceDisplay, #socsciConfidenceDisplay {
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+/* Practice Test Inputting Card */
+.testCard {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    border: 1px solid #cfd4de;
+    border-radius: 8px;
+    padding: 12px 16px;
+    width: 675px;
+    margin-top: 16px;
+}
+
+/* Input boxes practice tests */
+.typeOfTest, .testSubject, .testSection, .testScore {
+    height: 30px;
+    padding: 0 6px;
+    border: 1px solid #cfd4de;
+    border-radius: 6px;
+}
+
+/* Input boxes practice tests */
+.removeTestButton {
+    height: 30px;
+    padding: 0 6px;
+    border: 1px solid #cecece;
+    border-radius: 6px;
+    width: 100px;
+}
+
+/* Add practice test button */
+.addPracticeTestButton {
+    height: 30px;
+    padding: 0 6px;
+    border: 1px solid #cecece;
+    border-radius: 6px;
+    width: 150px;
+
+}
