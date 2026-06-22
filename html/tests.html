@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- HEADING -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acadec Hub - Dashboard</title>
+    <link rel="stylesheet" href="../css/main.css">
+</head>
+
+<body>
+    <!-- NAVIGATION BAR -->
+     <nav class="navigationBar">
+        <ul class="navigationLists">
+
+            <!-- Pages -->
+            <li><a href="index.html">Dashboard</a></li> <!-- Current page -->
+
+            <li class="dropdown">
+                <a href="#" class="dropdownButton">Subjects ▾</a>
+                <div class="dropdownSubjects">
+                    <a href="subjects/art.html">Art</a>
+                    <a href="subjects/econ.html">Economics</a>
+                    <a href="subjects/lit.html">Literature</a>
+                    <a href="subjects/math.html">Math</a>
+                    <a href="subjects/music.html">Music</a>
+                    <a href="subjects/sci.html">Science</a>
+                    <a href="subjects/socsci.html">Social Science</a>
+                </div>
+            </li>
+
+            <!-- Other pages -->
+            <li><a href="events.html">Events</a></li>
+            <li><a href="calendar.html">Calendar</a></li>
+            <li><a href="checkIn.html">Weekly Check Ins</a></li>
+            <li><a href="analytics.html">Analytics</a></li>
+            <li><a href="quickLinks.html"> Quick Links</a></li>
+            <li><a href="tests.html" class="onThisPage"> Testing Portal</a></li>
+        </ul>
+     </nav>
+    <!-- MAIN CONTENT -->
+    <main>
+
+        <div class="mainContent">
+
+            <!-- Heading -->
+            <section class="subjectHeading">
+                <h2>Practice Test</h2>
+                <p>Insert some stuff about taking a practice test</p>
+            </section>
+
+            <section class="checkInFormAesthetics">
+                <form id="practiceTestForm">
+                    <h3>Test Subject</h3>
+                    <select name="practiceTestSubject" class="practiceTestFormIndividual" required>
+                        <option value="" disabled selected>Select Subject</option>
+                        <option value="Art">Art</option>
+                        <option value="Econ">Economics</option>
+                        <option value="Lit">Literature</option>
+                        <option value="Math">Math</option>
+                        <option value="Music">Music</option>
+                        <option value="Sci">Science</option>
+                        <option value="Socsci">Social Science</option>
+                    </select>
+
+                    <h3>Test Section</h3>
+                    <select name="practiceTestSection" class="practiceTestFormIndividual" required>
+                        <option value="" disabled selected>Select Section</option>
+                        <option value="Section1">Section 1</option>
+                        <option value="Section2">Section 2</option>
+                        <option value="Section3">Section 3</option>
+                        <option value="Section4">Section 4</option>
+                        <option value="Section5">Section 5</option>
+                        <option value="FullTest">Full Subject Test</option>
+                    </select>
+
+                    <h3>Difficulty</h3>
+                    <div class="practiceTestFormIndividual">
+                        <div class="slider">
+                            <input type="range" id="testDifficulty" name="testDifficulty" min="0" max="10" step="1" value="0" class="actualSlider">
+                            <span id="testDifficultyDisplay">Difficulty</span>
+                        </div>
+                    </div> 
+
+                    <h3>Good luck!</h3>
+                    <section class="testingButton">
+                        <a href="music.html" class="testingButtonActual">Start Test</a>
+                    </section>
+
+                </form>
+
+
+
+            </section>
+
+        </div>
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <h2>Weekly Check In</h2>
+
+            <!-- Sidebar Cards -->
+            <section class="checkinSidebarCard"> <!-- checkIn Card -->
+                <h3>Pending</h3>
+                <p class="sidebarDescription">Week ending November 6th, 2100</p>
+                <a href="checkIn.html" class="checkInButton">Check In</a>
+
+            </section>
+            
+            <!-- Events Cards -->
+            <section class="eventSidebarCard">
+                <h3>Insert Event 1</h3>
+                <p class="sidebarDescription">We have a scrimmage this day, please show up :D</p>
+            </section>
+
+            <section class="eventSidebarCard">
+                <h3>Insert Event 2</h3>
+                <p class="sidebarDescription">We have a team bonding activity this day, please show up :D</p>
+            </section>
+        </aside>
+
+    </main>
+
+     <!-- Connects JavaScript file -->
+     <script src="../java/main.js"></script>
+
+
+
+</body>

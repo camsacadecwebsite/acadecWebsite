@@ -218,14 +218,22 @@ main {
     text-decoration: none;
     padding: 12px; 
     border-radius: 8px;
+}
+
+.testingButtonActual {
+    display: inline-block;
+    margin-top: 5px;
+    text-align: center; 
+    background-color: #e8f0fe; 
+    color: #1a73e8;
+    font-weight: 600; 
+    font-size: 0.9rem; 
+    text-decoration: none;
+    padding: 12px; 
+    border-radius: 8px;
     transition: background 0.2s;
 }
 
-
-/* When hovering over suggestion button */
-.suggestionButton:hover {
-    background-color: #d2e3fc;
-}
 
 /* Sidebar Stuff */
 .sidebar {
@@ -322,6 +330,10 @@ main {
 }
 
 .practiceTestButton {
+    margin: 10px 0px
+}
+
+.testingButton {
     margin: 10px 0px
 }
 
@@ -568,3 +580,19 @@ main {
     width: 150px;
 
 }
+
+/* Individual Aspects of Taking Practice Test */
+.practiceTestFormIndividual {
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 500px;
+}
+
+#practiceTestForm select.practiceTestFormIndividual {
+    height: 40px;
+    padding: 0 14px;
+    font-size: 0.90rem;
+    border: 1px solid #cfd4de;
+    border-radius: 8px;
+}
+

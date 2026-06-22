@@ -106,6 +106,19 @@ document.addEventListener('DOMContentLoaded', () => {
         socsciConfidenceSlider.addEventListener('input', updateSocsciConfidence);
     }
 
+    // Display Difficulty for Test
+    const testDifficulty = document.getElementById('testDifficulty');
+    const testDifficultyDisplay = document.getElementById('testDifficultyDisplay');
+
+    if (testDifficulty && testDifficultyDisplay) {
+        const updateDifficulty = () => {
+            testDifficultyDisplay.textContent = `Difficulty: ${testDifficulty.value} `; // Display confidence
+        };
+
+        updateDifficulty(); // Constantly update the display when event listener is triggered
+        testDifficulty.addEventListener('input', updateDifficulty);
+    }
+
 
 
     // ADD PRACTICE TEST INITIALIZATION
