@@ -1,5 +1,7 @@
+/* GENERAL STUFF */
+
+/* General Main Colors */
 :root {
-    /* General Main Colors */
     --backgroundColor: #ececec;
     --cardBackgroundColor: #ffffff;
     --textMainColor: #1c1c1c;
@@ -11,7 +13,7 @@
     --greenText: #137333;
 }
 
-/* General Reset stuff */
+/* General Resetting Stuff */
 * {
     box-sizing: border-box;
     margin: 0; padding: 0;
@@ -21,8 +23,10 @@
 body {
     background-color: var(--backgroundColor);
     color: var(--textMainColor);
-    padding: 80px 24px 24px 24px; /* 80 on top, 24 on other sides */
+    padding: 80px 24px 24px 24px;
 } 
+
+/* NAVIGATION */
 
 /* General Navigation Bar */
 .navigationBar {
@@ -34,13 +38,13 @@ body {
     background-color: var(--cardBackgroundColor); 
     border-bottom: 1px solid var(--borderColor); 
     display: flex; 
-    justify-content: space-between; /* Space distribution is equal */
+    justify-content: space-between;
     align-items: center;               
-    padding: 0 2rem; /* 2rem on both left and right */
+    padding: 0 2rem;
     z-index: 1000;
 }
 
-/* Navigation List */
+/* Navigation Lists */
 .navigationLists {
     display: flex;
     list-style: none; /* No bullet points */
@@ -59,12 +63,12 @@ body {
     transition: color 0.2s ease;
 }
 
-/* Hovering over certain stuff on navigation bar */
 .navigationLists a:hover {
     color: var(--hoverBlueColor);
 }
 
-/* Dropdown Menu Stuff */
+/* NAVIGATION DROPDOWN STUFF */
+
 .dropdown {
     position: relative; 
     display: inline-block; /* Next to others on same line, but has block element properties */
@@ -112,7 +116,8 @@ body {
     display: block; /* Line breaks */
 }
 
-/* Main container */
+
+/* MAIN STUFF */
 main {
     display: grid; 
     grid-template-columns: 2.75fr 1fr; /* 3:1 ratio of main vs sidebar */
@@ -136,6 +141,8 @@ main {
     color: #111111;
     margin-bottom: 16px;
 }
+
+/* ORGANIZE THESE LATER */
 
 /* Content Cards */
 .teamGoalMarker, .announcements, .suggestionBoard {
@@ -176,6 +183,94 @@ main {
     color: #999999;
     font-size: 0.8rem;
 }
+
+/* Analysis General Cards */
+.subjectsPredicted, .testData, .projectedOverall {
+    border-top: 1px solid #f0f2f5;
+    padding: 16px 0;
+    margin-bottom: 12px;
+
+}
+
+.projectedOverall {
+    text-align: center;
+}
+
+.subjectsPredicted, .testData {
+    font-size: 1.05rem;
+    color: #1a1a1a;
+    margin-bottom: 12px;
+
+}
+
+.analyticsMain h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.projectedOverall h2 {
+    margin-bottom: 12px;
+    
+}
+
+.projectedOverall h1 {
+    color: #0c5fcb;
+    font-weight: 800;
+    font-size: 3rem;
+}
+
+/* Analytics Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th {
+    padding: 6px 0px;
+    font-size: 0.95rem;
+    text-align: left;
+    border-bottom: 1px solid #f0f2f5;
+}
+
+table td {
+    padding: 5px 1px;
+    font-size: 0.95rem;
+    text-align: left;
+    border-bottom: 1px solid #f0f2f5;
+}
+
+/* Progress Bar for Analytics */
+.progressBar {
+    width: 150px;
+    height: 15px;
+    background-color: #ececec;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.progressBarFilled {
+    background: #0c5fcb;
+    border-radius: 4px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+tr:nth-of-type(2) .progressBarFilled { width: 96%; }
+tr:nth-of-type(3) .progressBarFilled { width: 90%; }
+tr:nth-of-type(4) .progressBarFilled { width: 90%; }
+tr:nth-of-type(5) .progressBarFilled { width: 83%; }
+tr:nth-of-type(6) .progressBarFilled { width: 94%; }
+tr:nth-of-type(7) .progressBarFilled { width: 94%; }
+tr:nth-of-type(8) .progressBarFilled { width: 90%; }
+tr:nth-of-type(9) .progressBarFilled { width: 80%; }
+tr:nth-of-type(10) .progressBarFilled { width: 93%; }
+tr:nth-of-type(11) .progressBarFilled { width: 94%; }
+tr:nth-of-type(12) .progressBarFilled { width: 90%; }
+
 
 /* Suggestion Board */
 .suggestionBoard .suggestion-cards-container {
@@ -364,7 +459,7 @@ main {
 }
 
 /* Subject Big Boxes */
-.subjectHeading, .notes, .quizletBlock, .gameBlock {
+.subjectHeading, .notes, .quizletBlock, .gameBlock, .analyticsMain {
     background: #ffffff;
     border: 1px solid #eef1f4; 
     border-radius: 12px;
