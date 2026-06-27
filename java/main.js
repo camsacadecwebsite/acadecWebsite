@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // HTML for test cards
         testCardRow.innerHTML = `
-            <select name="typeOfTest[]" class="typeOfTest" required>
+            <select name="CHANGE LATER" class="typeOfTest" required>
                 <option value="" disabled selected>Select Type of Test</option>
                 <option value="Demidec">Demidec Section Test</option>
                 <option value="USADEasy">USAD Easy Test</option>
@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <option value="SiteTest">Site Test</option>
             </select>
 
-            <select name="testSubject[]" class="testSubject" required>
+            <select name="CHANGE LATER" class="testSubject" required>
                 <option value="" disabled selected>Select Subject</option>
                 <option value="Art">Art</option>
                 <option value="Econ">Economics</option>
@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <option value="Socsci">Social Science</option>
             </select>
 
-            <select name="testSection[]" class="testSection" required>
+            <select name="CHANGE LATER" class="testSection" required>
                 <option value="" disabled selected>Select Section</option>
                 <option value="Section1">Section 1</option>
                 <option value="Section2">Section 2</option>
@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <option value="FullTest">Full Subject Test</option>
             </select>
             
-            <input type="number" name="testScore[]" class="testScore" placeholder="Score (0-1000)" min="0" max="1000" required>
+            <input type="number" name="CHANGE LATER" class="testScore" placeholder="Score (0-1000)" min="0" max="1000" required>
             
             <button type="button" class="removeTestButton" title="removeTestButton">Remove Test</button>
         `;
