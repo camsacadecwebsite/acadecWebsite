@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             <input type="number" name="testScore" class="testScore" placeholder="Score (0-1000)" min="0" max="1000" required>
             
-            <button type="button" class="removeTestButton" title="removeTestButton">Remove Test</button>`;
+            <button type="button" class="removeTestButton">Remove Test</button>`;
 
         const removeButton = testCardRow.querySelector('.removeTestButton'); // Trash test card button
         if (removeButton) {
