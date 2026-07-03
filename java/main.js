@@ -222,12 +222,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <select name="testSection" class="testSection" required>
                 <option value="" disabled selected>Select Section</option>
-                <option value="Section1">Section 1</option>
-                <option value="Section2">Section 2</option>
-                <option value="Section3">Section 3</option>
-                <option value="Section4">Section 4</option>
-                <option value="Section5">Section 5</option>
-                <option value="FullTest">Full Subject Test</option>
+                <option value="section1">Section 1</option>
+                <option value="section2">Section 2</option>
+                <option value="section3">Section 3</option>
+                <option value="section4">Section 4</option>
+                <option value="section5">Section 5</option>
+                <option value="fullTest">Full Subject Test</option>
             </select>
             
             <input type="number" name="testScore" class="testScore" placeholder="Score (0-1000)" min="0" max="1000" required>
