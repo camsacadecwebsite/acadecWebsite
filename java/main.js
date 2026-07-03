@@ -119,7 +119,74 @@ document.addEventListener('DOMContentLoaded', () => {
         testDifficulty.addEventListener('input', updateDifficulty);
     }
 
+    // COMBINE STUFF FOR SECTIONS + PRACTICE TESTS
+    const form = document.getElementById('checkInForm') // Load form in
 
+    form.addEventListener('submit', function(e) { 
+        e.preventDefault();
+
+        const formData = new FormData(form);
+
+        // SECTION COMBINATION
+        // Combining sections studied function
+        function sectionSummary(groupName) {
+            const checkedBoxes = document.querySelectorAll(`input[name="${groupName}"]:checked`);
+
+            if (checkedBoxes.length === 0) { // Check if empty
+                return 'Nothing'
+            }
+
+            // If not empty, append everything
+            let checkedValues = [];
+            checkedBoxes.forEach(box => {
+                checkedValues.push(box.value);
+            });
+
+            return checkedValues.join(', ') // Once everything appended, return that
+        }
+
+        formData.append('artSectionsTotal', sectionSummary('artSection'));
+        formData.append('econSectionsTotal', sectionSummary('econSection'));
+        formData.append('litSectionsTotal', sectionSummary('litSection'));
+        formData.append('mathSectionsTotal', sectionSummary('mathSection'));
+        formData.append('musicSectionsTotal', sectionSummary('musicSection'));
+        formData.append('sciSectionsTotal', sectionSummary('sciSection'));
+        formData.append('socsciSectionsTotal', sectionSummary('socsciSection'));
+
+        // TEST CARD COMBINATION
+        const testCards = document.querySelectorAll('.testCard')
+        let testList = [];
+
+        // Append stuff for each test card
+        testCards.forEach(card => {
+            const testType = card.querySelector('[name="testType"]').value;
+            const testSubject = card.querySelector('[name="testSubject"]').value;
+            const testSection = card.querySelector('[name="testSection"]').value;
+            const testScore = card.querySelector('[name="testScore"]').value;
+
+            testList.push(`Test: ${testType}, Test Subject: (${testSubject}, Test Section: ${testSection}), Test Score: ${testScore}`);
+        });
+
+        // Combine Everything
+        const allTests = testList.join('\n');
+        formData.append('practiceTests', allTests);
+
+        // SEND EVERYTHING TO SPREADSHEET
+        const spreadsheetLink = 'https://script.google.com/macros/s/AKfycbyIVPdkRMLLqPLMqLFQ5F0cC9pcuDJt2FzmaNCskDb_MSvZ7cwVD6_okZBNwpbE8ykU/exec'; 
+
+        fetch(spreadsheetLink, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.result === 'success') {
+                form.reset();
+                document.getElementById('addPracticeTestSection').innerHTML = ''; 
+            }
+        });
+
+    });
 
     // ADD PRACTICE TEST INITIALIZATION
     // Practice Test Button and Section where they go
@@ -133,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // HTML for test cards
         testCardRow.innerHTML = `
-            <select name="CHANGE LATER" class="typeOfTest" required>
+            <select name="testType" class="typeOfTest" required>
                 <option value="" disabled selected>Select Type of Test</option>
                 <option value="Demidec">Demidec Section Test</option>
                 <option value="USADEasy">USAD Easy Test</option>
@@ -142,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <option value="SiteTest">Site Test</option>
             </select>
 
-            <select name="CHANGE LATER" class="testSubject" required>
+            <select name="testSubject" class="testSubject" required>
                 <option value="" disabled selected>Select Subject</option>
                 <option value="Art">Art</option>
                 <option value="Econ">Economics</option>
@@ -153,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <option value="Socsci">Social Science</option>
             </select>
 
-            <select name="CHANGE LATER" class="testSection" required>
+            <select name="testSection" class="testSection" required>
                 <option value="" disabled selected>Select Section</option>
                 <option value="Section1">Section 1</option>
                 <option value="Section2">Section 2</option>
@@ -163,10 +230,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <option value="FullTest">Full Subject Test</option>
             </select>
             
-            <input type="number" name="CHANGE LATER" class="testScore" placeholder="Score (0-1000)" min="0" max="1000" required>
+            <input type="number" name="testScore" class="testScore" placeholder="Score (0-1000)" min="0" max="1000" required>
             
-            <button type="button" class="removeTestButton" title="removeTestButton">Remove Test</button>
-        `;
+            <button type="button" class="removeTestButton" title="removeTestButton">Remove Test</button>`;
 
         const removeButton = testCardRow.querySelector('.removeTestButton'); // Trash test card button
         if (removeButton) {
