@@ -122,124 +122,285 @@ document.addEventListener('DOMContentLoaded', () => {
     // COMBINE STUFF FOR SECTIONS + PRACTICE TESTS
     const form = document.getElementById('checkInForm') // Load form in
 
-    form.addEventListener('submit', function(e) { 
-        e.preventDefault();
+    if (form) {
+        form.addEventListener('submit', function(e) { 
+            e.preventDefault();
 
-        const formData = new FormData(form);
+            const formData = new FormData(form);
 
-        // SECTION COMBINATION
-        // Combining sections studied function
-        function sectionSummary(groupName) {
-            const checkedBoxes = document.querySelectorAll(`input[name="${groupName}"]:checked`);
+            // SECTION COMBINATION
+            // Combining sections studied function
+            function sectionSummary(groupName) {
+                const checkedBoxes = document.querySelectorAll(`input[name="${groupName}"]:checked`);
 
-            if (checkedBoxes.length === 0) { // Check if empty
-                return 'Nothing'
+                if (checkedBoxes.length === 0) { // Check if empty
+                    return 'Nothing'
+                }
+
+                // If not empty, append everything
+                let checkedValues = [];
+                checkedBoxes.forEach(box => {
+                    checkedValues.push(box.value);
+                });
+
+                return checkedValues.join(', ') // Once everything appended, return that
             }
 
-            // If not empty, append everything
-            let checkedValues = [];
-            checkedBoxes.forEach(box => {
-                checkedValues.push(box.value);
+            formData.append('artSectionsTotal', sectionSummary('artSection'));
+            formData.append('econSectionsTotal', sectionSummary('econSection'));
+            formData.append('litSectionsTotal', sectionSummary('litSection'));
+            formData.append('mathSectionsTotal', sectionSummary('mathSection'));
+            formData.append('musicSectionsTotal', sectionSummary('musicSection'));
+            formData.append('sciSectionsTotal', sectionSummary('sciSection'));
+            formData.append('socsciSectionsTotal', sectionSummary('socsciSection'));
+
+            // TEST CARD COMBINATION
+            const testCards = document.querySelectorAll('.testCard')
+            let testList = [];
+
+            // Append stuff for each test card
+            testCards.forEach(card => {
+                const testType = card.querySelector('[name="testType"]').value;
+                const testSubject = card.querySelector('[name="testSubject"]').value;
+                const testSection = card.querySelector('[name="testSection"]').value;
+                const testScore = card.querySelector('[name="testScore"]').value;
+
+                testList.push(`Test: ${testType}, Test Subject: (${testSubject}, Test Section: ${testSection}), Test Score: ${testScore}`);
             });
 
-            return checkedValues.join(', ') // Once everything appended, return that
-        }
+            // Combine Everything
+            const allTests = testList.join('\n');
+            formData.append('practiceTests', allTests);
 
-        formData.append('artSectionsTotal', sectionSummary('artSection'));
-        formData.append('econSectionsTotal', sectionSummary('econSection'));
-        formData.append('litSectionsTotal', sectionSummary('litSection'));
-        formData.append('mathSectionsTotal', sectionSummary('mathSection'));
-        formData.append('musicSectionsTotal', sectionSummary('musicSection'));
-        formData.append('sciSectionsTotal', sectionSummary('sciSection'));
-        formData.append('socsciSectionsTotal', sectionSummary('socsciSection'));
+            // SEND EVERYTHING TO SPREADSHEET
+            const spreadsheetLink = 'https://script.google.com/macros/s/AKfycbyIVPdkRMLLqPLMqLFQ5F0cC9pcuDJt2FzmaNCskDb_MSvZ7cwVD6_okZBNwpbE8ykU/exec'; 
 
-        // TEST CARD COMBINATION
-        const testCards = document.querySelectorAll('.testCard')
-        let testList = [];
+            fetch(spreadsheetLink, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.result === 'success') {
+                    form.reset();
+                    document.getElementById('addPracticeTestSection').innerHTML = ''; 
+                }
+            });
 
-        // Append stuff for each test card
-        testCards.forEach(card => {
-            const testType = card.querySelector('[name="testType"]').value;
-            const testSubject = card.querySelector('[name="testSubject"]').value;
-            const testSection = card.querySelector('[name="testSection"]').value;
-            const testScore = card.querySelector('[name="testScore"]').value;
-
-            testList.push(`Test: ${testType}, Test Subject: (${testSubject}, Test Section: ${testSection}), Test Score: ${testScore}`);
         });
-
-        // Combine Everything
-        const allTests = testList.join('\n');
-        formData.append('practiceTests', allTests);
-
-        // SEND EVERYTHING TO SPREADSHEET
-        const spreadsheetLink = 'https://script.google.com/macros/s/AKfycbyIVPdkRMLLqPLMqLFQ5F0cC9pcuDJt2FzmaNCskDb_MSvZ7cwVD6_okZBNwpbE8ykU/exec'; 
-
-        fetch(spreadsheetLink, {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.result === 'success') {
-                form.reset();
-                document.getElementById('addPracticeTestSection').innerHTML = ''; 
-            }
-        });
-
-    });
+    }
 
     // ADD PRACTICE TEST INITIALIZATION
     // Practice Test Button and Section where they go
     const addPracticeTestButton = document.getElementById('addPracticeTestButton');
     const addPracticeTestSection = document.getElementById('addPracticeTestSection');
 
-    // Make practice test button
-    addPracticeTestButton.addEventListener('click', () => {
-        const testCardRow = document.createElement('div');
-        testCardRow.classList.add('testCard'); 
+    if (addPracticeTestButton && addPracticeTestSection) {
+        // Make practice test button
+        addPracticeTestButton.addEventListener('click', () => {
+            const testCardRow = document.createElement('div');
+            testCardRow.classList.add('testCard'); 
 
-        // HTML for test cards
-        testCardRow.innerHTML = `
-            <select name="testType" class="typeOfTest" required>
-                <option value="" disabled selected>Select Type of Test</option>
-                <option value="Demidec">Demidec Section Test</option>
-                <option value="USADEasy">USAD Easy Test</option>
-                <option value="USADMedium">USAD Medium Test</option>
-                <option value="USADHard">USAD Hard Test</option>
-                <option value="SiteTest">Site Test</option>
-            </select>
+            // HTML for test cards
+            testCardRow.innerHTML = `
+                <select name="testType" class="typeOfTest" required>
+                    <option value="" disabled selected>Select Type of Test</option>
+                    <option value="Demidec">Demidec Section Test</option>
+                    <option value="USADEasy">USAD Easy Test</option>
+                    <option value="USADMedium">USAD Medium Test</option>
+                    <option value="USADHard">USAD Hard Test</option>
+                    <option value="SiteTest">Site Test</option>
+                </select>
 
-            <select name="testSubject" class="testSubject" required>
-                <option value="" disabled selected>Select Subject</option>
-                <option value="Art">Art</option>
-                <option value="Econ">Economics</option>
-                <option value="Lit">Literature</option>
-                <option value="Math">Math</option>
-                <option value="Music">Music</option>
-                <option value="Sci">Science</option>
-                <option value="Socsci">Social Science</option>
-            </select>
+                <select name="testSubject" class="testSubject" required>
+                    <option value="" disabled selected>Select Subject</option>
+                    <option value="Art">Art</option>
+                    <option value="Econ">Economics</option>
+                    <option value="Lit">Literature</option>
+                    <option value="Math">Math</option>
+                    <option value="Music">Music</option>
+                    <option value="Sci">Science</option>
+                    <option value="Socsci">Social Science</option>
+                </select>
 
-            <select name="testSection" class="testSection" required>
-                <option value="" disabled selected>Select Section</option>
-                <option value="section1">Section 1</option>
-                <option value="section2">Section 2</option>
-                <option value="section3">Section 3</option>
-                <option value="section4">Section 4</option>
-                <option value="section5">Section 5</option>
-                <option value="fullTest">Full Subject Test</option>
-            </select>
-            
-            <input type="number" name="testScore" class="testScore" placeholder="Score (0-1000)" min="0" max="1000" required>
-            
-            <button type="button" class="removeTestButton">Remove Test</button>`;
+                <select name="testSection" class="testSection" required>
+                    <option value="" disabled selected>Select Section</option>
+                    <option value="section1">Section 1</option>
+                    <option value="section2">Section 2</option>
+                    <option value="section3">Section 3</option>
+                    <option value="section4">Section 4</option>
+                    <option value="section5">Section 5</option>
+                    <option value="fullTest">Full Subject Test</option>
+                </select>
+                
+                <input type="number" name="testScore" class="testScore" placeholder="Score (0-1000)" min="0" max="1000" required>
+                
+                <button type="button" class="removeTestButton">Remove Test</button>`;
 
-        const removeButton = testCardRow.querySelector('.removeTestButton'); // Trash test card button
-        if (removeButton) {
-            removeButton.addEventListener('click', () => {
-                testCardRow.remove(); // If click, remove
-            });
+            const removeButton = testCardRow.querySelector('.removeTestButton'); // Trash test card button
+            if (removeButton) {
+                removeButton.addEventListener('click', () => {
+                    testCardRow.remove(); // If click, remove
+                });
+            }
+            addPracticeTestSection.appendChild(testCardRow);
+        });
+
+    }
+
+
+    // STUFF FOR PRACTICE TEST
+    const startTestButton = document.getElementById('startTestButton');
+    if (startTestButton) {
+        startTestButton.addEventListener('click', () => {
+            const practiceTestForm = document.getElementById('practiceTestForm');
+            if (practiceTestForm) {
+                const subjectSelected = practiceTestForm.querySelector('[name="practiceTestSubject"]');
+                const sectionSelected = practiceTestForm.querySelector('[name="practiceTestSection"]');
+                
+                // If youput stuff
+                if (subjectSelected && sectionSelected) {
+                    const subject = subjectSelected.value;
+                    const section = sectionSelected.value;
+                    
+                    // Check if you put the stuff
+                    if (!subject || !section) {
+                        alert("Sonion ring you forgot smth");
+                        return;
+                    }
+
+                    // Redirect user
+                    window.location.href = `testingPortal.html?subject=${encodeURIComponent(subject)}&section=${encodeURIComponent(section)}`;
+                }
+            }
+        });
+    }
+
+
+    // Question generation stuff
+    const actualPracticeTestForm = document.getElementById('dynamicQuizForm');
+    if (actualPracticeTestForm) {
+        const parameters = new URLSearchParams(window.location.search);
+        const selectedSubject = parameters.get('subject');
+        const selectedSection = parameters.get('section');
+        const totalQQ = 5;
+        const otherSpreadsheetURL = 'https://script.google.com/macros/s/AKfycbxJ1XTYXv_V9VynslcBjOapReBx9YBjHEzPmhUicKJKYjzoMsBE7i9qLvBuDX_DjaJPPA/exec';
+        
+        // Loading the questions in
+        const loadingZone = actualPracticeTestForm.querySelector('.testingButton');
+        actualPracticeTestForm.innerHTML = '<p id="loadingStatus">Loading test...</p>';
+        if (loadingZone) {
+            actualPracticeTestForm.appendChild(loadingZone);
+
         }
-        addPracticeTestSection.appendChild(testCardRow);
-    });
+        
+        // Again check if you put the stuff
+        const statusText = document.getElementById('loadingStatus');
+        if (!selectedSubject || !selectedSection) {
+            if (statusText) {
+                statusText.textContent = "Bruh put in the stuff";
+            }
+            return;
+        }
+
+        // Complicated ahh fetching stuff
+        fetch(otherSpreadsheetURL)
+            .then(function(res) { 
+                return res.json(); 
+            })
+            .then(function(data) {
+
+                // If you can't load the question bank in
+                if (data.result !== 'success') {
+                    if (statusText) {
+                        statusText.textContent = 'The question bank is lowkey cooked';
+                    } 
+                    return;
+                }
+
+                // Filter everything + make sure its lowercase
+                let poolOfQQ = [];
+                for (let i = 0; i < data.questions.length; i++) {
+                    let q = data.questions[i];
+                    if (q.subject && q.section) {
+                        if (q.subject.toLowerCase() === selectedSubject.toLowerCase() && q.section.toLowerCase() === selectedSection.toLowerCase()) {
+                            poolOfQQ.push(q);
+                        }
+                    }
+                }
+
+                // If the questions aint questioning
+                if (poolOfQQ.length === 0) {
+                    if (statusText) {
+                        statusText.textContent = `No questions in that section, either it doesn't exist or I'm working on it.`;
+                    }
+                    return;
+                }
+
+                // Get random questions
+                poolOfQQ.sort(() => 0.5 - Math.random());
+                const activeQuizSet = poolOfQQ.slice(0, totalQQ);
+                
+                if (statusText) {
+                    statusText.remove();
+                }
+
+                // HTML for the sets, loop through how many questions there are
+                activeQuizSet.forEach((q, i) => {
+                    const block = document.createElement('section');
+                    block.classList.add('questionBlock');
+
+                    block.innerHTML = `
+                        <h3 class="questionText">Question ${i + 1}: ${q.questionText}</h3>
+                        <div class="questionOptions">
+                            <label class="possibleOption">
+                                <input type="radio" name="question_${i}" value="${q.optionA}" required>
+                                <span class="possibleOptionText">A. ${q.optionA}</span>
+                            </label>
+                        </div>
+                        <div class="questionOptions">
+                            <label class="possibleOption">
+                                <input type="radio" name="question_${i}" value="${q.optionB}">
+                                <span class="possibleOptionText">B. ${q.optionB}</span>
+                            </label>
+                        </div>
+                        <div class="questionOptions">
+                            <label class="possibleOption">
+                                <input type="radio" name="question_${i}" value="${q.optionC}">
+                                <span class="possibleOptionText">C. ${q.optionC}</span>
+                            </label>
+                        </div>
+                        <div class="questionOptions">
+                            <label class="possibleOption">
+                                <input type="radio" name="question_${i}" value="${q.optionD}">
+                                <span class="possibleOptionText">D. ${q.optionD}</span>
+                            </label>
+                        </div>
+                    `;
+                    
+                    if (loadingZone) {
+                        actualPracticeTestForm.insertBefore(block, loadingZone);
+                    } 
+                    else {
+                        actualPracticeTestForm.appendChild(block);
+                    }
+                });
+            })
+            .catch(err => {
+                console.error(err);
+                if (statusText) {
+                    statusText.textContent = 'Either the network aint working or my code isnt. I dont know.';
+                }
+            });
+        
+        // Finishing the test
+        actualPracticeTestForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('YOU FINISHED YAYAYAYYAYAY');
+            window.location.href = 'tests.html';
+        });
+
+    }
+
+
 });
