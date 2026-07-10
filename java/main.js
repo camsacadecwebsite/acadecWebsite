@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
             formData.append('practiceTests', allTests);
 
             // SEND EVERYTHING TO SPREADSHEET
-            const spreadsheetLink = 'https://script.google.com/macros/s/AKfycbyIVPdkRMLLqPLMqLFQ5F0cC9pcuDJt2FzmaNCskDb_MSvZ7cwVD6_okZBNwpbE8ykU/exec'; 
+            const spreadsheetLink = 'https://script.google.com/macros/s/AKfycbwiUwDUSmkiTzkyAINbts1-WFV1IcjToORc2CK3yytHQwZRuD9iWfNuPFYJzdZlH-8LSA/exec'; 
 
             fetch(spreadsheetLink, {
                 method: 'POST',
@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedSubject = parameters.get('subject');
         const selectedSection = parameters.get('section');
         const totalQQ = 5;
-        const otherSpreadsheetURL = 'https://script.google.com/macros/s/AKfycbxJ1XTYXv_V9VynslcBjOapReBx9YBjHEzPmhUicKJKYjzoMsBE7i9qLvBuDX_DjaJPPA/exec';
+        const otherSpreadsheetURL = 'https://script.google.com/macros/s/AKfycbxVjbajMXelWSKsjLshxPvtulfOkz55zxHw5eg9ifwcriKM7G-9HInaDpKLAZm3l6Kq/exec';
         
         // Loading the questions in
         const loadingZone = actualPracticeTestForm.querySelector('.testingButton');
@@ -380,8 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     if (loadingZone) {
                         actualPracticeTestForm.insertBefore(block, loadingZone);
-                    } 
-                    else {
+                    } else {
                         actualPracticeTestForm.appendChild(block);
                     }
                 });
@@ -396,11 +395,60 @@ document.addEventListener('DOMContentLoaded', () => {
         // Finishing the test
         actualPracticeTestForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            alert('YOU FINISHED YAYAYAYYAYAY');
-            window.location.href = 'tests.html';
+
+            const questionBlocks = actualPracticeTestForm.querySelectorAll('.questionBlock');
+            const results = [];
+
+            // Create the block for chosen answers and stuff
+            for (let i = 0; i < questionBlocks.length; i++) {
+                const currentBlock = questionBlocks[i];
+                const questionText = currentBlock.querySelector('.questionText').textContent;
+                
+                const selectedOption = currentBlock.querySelector('input[name="question_' + i + '"]:checked');
+                var chosenAnswer;
+                if (selectedOption) {
+                    chosenAnswer = selectedOption.value;
+                } else {
+                    chosenAnswer = "Nothing Selected"
+                }
+
+
+                const optionLabels = currentBlock.querySelectorAll('.possibleOptionText');
+                const optionsList = [];
+                for (const option of optionLabels) {
+                    optionsList.push(option.textContent.trim());
+                }
+
+                results.push(questionText + " Options: " + optionsList.join(', ') + " Chosen: " + chosenAnswer);
+            }
+
+            // Creating results data
+            const resultsData = new FormData();
+            resultsData.append('submissionType', 'testResult');
+            resultsData.append('subject', selectedSubject || 'Unknown');
+            resultsData.append('section', selectedSection || 'Unknown');
+            resultsData.append('answersSummary', results.join('\n'));
+
+            const answersToSpreadsheet = 'https://script.google.com/macros/s/AKfycbw2nGemnwlEMBUWO1AzP1j4VSD8-0XeMYKTwjciWHw40OnJff-axVRQWVxZi8bqF1MJ6w/exec';
+
+            fetch(answersToSpreadsheet, {
+                method: 'POST',
+                body: resultsData
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert('YAYAYAYAY YOU FINISHED!!!');
+                window.location.href = 'tests.html';
+            })
+            .catch(err => {
+                console.error(err);
+                if (statusText) {
+                    statusText.textContent = ('Your network got cooked, sorry :(');
+                }
+                window.location.href = 'tests.html';
+            });
         });
 
     }
-
 
 });
