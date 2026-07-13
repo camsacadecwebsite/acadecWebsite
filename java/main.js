@@ -451,4 +451,121 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
+    // ANALYTICS STUFF
+    var overallScoreDisplay = document.getElementById('overallScoreDisplay')
+    if (overallScoreDisplay) {
+        var analyticsSpreadsheet = 'https://script.google.com/macros/s/AKfycbxsejvlWZNucqTMJCrXjOeD7i0Jv03MkG_ii3d3BSKK8N_HYRuIbO8FMjHU6SzPaqZh/exec'
+
+        fetch(analyticsSpreadsheet)
+        .then(function(res) {
+            return res.json();
+        })
+        .then(function(data) {
+            console.log(data);
+
+            if (data.result !== 'success') {
+                console.log("The analytics stuff isn't super hot rn");
+                console.log(data.error); // Debugging stuff
+                return;
+            }
+
+            // Overall Projected Table
+            var projectedAnalyticsData = data.projected;
+            overallScoreDisplay.textContent = projectedAnalyticsData.total.proj;
+
+            document.getElementById('artAverage').textContent = projectedAnalyticsData.art.avg;
+            document.getElementById('artProjection').textContent = projectedAnalyticsData.art.proj;
+            document.getElementById('artConfidence').textContent = projectedAnalyticsData.art.conf + "/10";
+            document.getElementById('artBar').style.width = projectedAnalyticsData.art.bar + "%";
+
+            document.getElementById('econAverage').textContent = projectedAnalyticsData.econ.avg;
+            document.getElementById('econProjection').textContent = projectedAnalyticsData.econ.proj;
+            document.getElementById('econConfidence').textContent = projectedAnalyticsData.econ.conf + "/10";
+            document.getElementById('econBar').style.width = projectedAnalyticsData.econ.bar + "%";
+
+            document.getElementById('litAverage').textContent = projectedAnalyticsData.lit.avg;
+            document.getElementById('litProjection').textContent = projectedAnalyticsData.lit.proj;
+            document.getElementById('litConfidence').textContent = projectedAnalyticsData.lit.conf + "/10";
+            document.getElementById('litBar').style.width = projectedAnalyticsData.lit.bar + "%";
+
+            document.getElementById('mathAverage').textContent = projectedAnalyticsData.math.avg;
+            document.getElementById('mathProjection').textContent = projectedAnalyticsData.math.proj;
+            document.getElementById('mathConfidence').textContent = projectedAnalyticsData.math.conf + "/10";
+            document.getElementById('mathBar').style.width = projectedAnalyticsData.math.bar + "%";
+
+            document.getElementById('musicAverage').textContent = projectedAnalyticsData.music.avg;
+            document.getElementById('musicProjection').textContent = projectedAnalyticsData.music.proj;
+            document.getElementById('musicConfidence').textContent = projectedAnalyticsData.music.conf + "/10";
+            document.getElementById('musicBar').style.width = projectedAnalyticsData.music.bar + "%";
+
+            document.getElementById('sciAverage').textContent = projectedAnalyticsData.sci.avg;
+            document.getElementById('sciProjection').textContent = projectedAnalyticsData.sci.proj;
+            document.getElementById('sciConfidence').textContent = projectedAnalyticsData.sci.conf + "/10";
+            document.getElementById('sciBar').style.width = projectedAnalyticsData.sci.bar + "%";
+
+            document.getElementById('socsciAverage').textContent = projectedAnalyticsData.socsci.avg;
+            document.getElementById('socsciProjection').textContent = projectedAnalyticsData.socsci.proj;
+            document.getElementById('socsciConfidence').textContent = projectedAnalyticsData.socsci.conf + "/10";
+            document.getElementById('socsciBar').style.width = projectedAnalyticsData.socsci.bar + "%";
+
+            document.getElementById('essayAverage').textContent = projectedAnalyticsData.essay.avg;
+            document.getElementById('essayProjection').textContent = projectedAnalyticsData.essay.proj;
+            document.getElementById('essayConfidence').textContent = projectedAnalyticsData.essay.conf + "/10";
+            document.getElementById('essayBar').style.width = projectedAnalyticsData.essay.bar + "%";
+
+            document.getElementById('interviewAverage').textContent = projectedAnalyticsData.interview.avg;
+            document.getElementById('interviewProjection').textContent = projectedAnalyticsData.interview.proj;
+            document.getElementById('interviewConfidence').textContent = projectedAnalyticsData.interview.conf + "/10";
+            document.getElementById('interviewBar').style.width = projectedAnalyticsData.interview.bar + "%";
+
+            document.getElementById('speechAverage').textContent = projectedAnalyticsData.speech.avg;
+            document.getElementById('speechProjection').textContent = projectedAnalyticsData.speech.proj;
+            document.getElementById('speechConfidence').textContent = projectedAnalyticsData.speech.conf + "/10";
+            document.getElementById('speechBar').style.width = projectedAnalyticsData.speech.bar + "%";
+
+            document.getElementById('totalAverage').textContent = projectedAnalyticsData.total.avg;
+            document.getElementById('totalProjection').textContent = projectedAnalyticsData.total.proj;
+            document.getElementById('totalConfidence').textContent = projectedAnalyticsData.total.conf + "/10";
+            document.getElementById('totalBar').style.width = projectedAnalyticsData.total.bar + "%";
+
+            // Recent Tests Table
+            var recentTestTable = document.getElementById('recentTestTable');
+            var tests = data.recentTests;
+
+            if (tests[0]) {
+                var row0 = document.createElement('tr');
+                row0.innerHTML = '<th>' + tests[0].sub + '</th><td>' + tests[0].sec + '</td><td>' + tests[0].type + '</td><td>' + tests[0].score + '</td><td>' + tests[0].date + '</td>';
+                recentTestTable.appendChild(row0);
+            }
+            if (tests[1]) {
+                var row1 = document.createElement('tr');
+                row1.innerHTML = '<th>' + tests[1].sub + '</th><td>' + tests[1].sec + '</td><td>' + tests[1].type + '</td><td>' + tests[1].score + '</td><td>' + tests[1].date + '</td>';
+                recentTestTable.appendChild(row1);
+            }
+            if (tests[2]) {
+                var row2 = document.createElement('tr');
+                row2.innerHTML = '<th>' + tests[2].sub + '</th><td>' + tests[2].sec + '</td><td>' + tests[2].type + '</td><td>' + tests[2].score + '</td><td>' + tests[2].date + '</td>';
+                recentTestTable.appendChild(row2);
+            }
+            if (tests[3]) {
+                var row3 = document.createElement('tr');
+                row3.innerHTML = '<th>' + tests[3].sub + '</th><td>' + tests[3].sec + '</td><td>' + tests[3].type + '</td><td>' + tests[3].score + '</td><td>' + tests[3].date + '</td>';
+                recentTestTable.appendChild(row3);
+            }
+            if (tests[4]) {
+                var row4 = document.createElement('tr');
+                row4.innerHTML = '<th>' + tests[4].sub + '</th><td>' + tests[4].sec + '</td><td>' + tests[4].type + '</td><td>' + tests[4].score + '</td><td>' + tests[4].date + '</td>';
+                recentTestTable.appendChild(row4);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            if (statusText) {
+                    statusText.textContent = 'Either the network aint working or my code isnt. I dont know.';
+            }
+        });
+        
+
+    }
+
 });

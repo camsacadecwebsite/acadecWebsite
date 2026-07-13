@@ -53,7 +53,7 @@
 
                 <section class="projectedOverall">
                     <h2>Projected Overall Score</h2>
-                    <h1>7000</h1>
+                    <h1 id="overallScoreDisplay">0000</h1>
                 </section>
 
                 <!-- Subject Prediction -->
@@ -70,156 +70,112 @@
 
                         <tr>
                             <th>Art</th>
-                            <td>880</td>
-                            <td>960</td>
-                            <td>9/10</td>
+                            <td id="artAverage"></td>
+                            <td id="artProjection"></td>
+                            <td id="artConfidence"></td>
                             <td>
-                                <div class="progressBar">
-                                    <div class="progressBarFilled">
-                                        <span class="progressBarText"></span>
-                                    </div>
-                                </div>
+                                <div class="progressBar"><div class="progressBarFilled" id="artBar"><span class="progressBarText"></span></div></div>
                             </td>
                             
                         </tr>
 
                         <tr>
                             <th>Economics</th>
-                            <td>780</td>
-                            <td>900</td>
-                            <td>8/10</td>
+                            <td id="econAverage"></td>
+                            <td id="econProjection"></td>
+                            <td id="econConfidence"></td>
                             <td>
-                                <div class="progressBar">
-                                    <div class="progressBarFilled">
-                                        <span class="progressBarText"></span>
-                                    </div>
-                                </div>
+                                <div class="progressBar"><div class="progressBarFilled" id="econBar"><span class="progressBarText"></span></div></div>
                             </td>
                         </tr>
 
                         <tr>
                             <th>Literature</th>
-                            <td>840</td>
-                            <td>900</td>
-                            <td>7/10</td>
+                            <td id="litAverage"></td>
+                            <td id="litProjection"></td>
+                            <td id="litConfidence"></td>
                             <td>
-                                <div class="progressBar">
-                                    <div class="progressBarFilled">
-                                        <span class="progressBarText"></span>
-                                    </div>
-                                </div>
+                                <div class="progressBar"><div class="progressBarFilled" id="litBar"><span class="progressBarText"></span></div></div>
                             </td>
                         </tr>
 
                         <tr>
                             <th>Math</th>
-                            <td>714</td>
-                            <td>829</td>
-                            <td>6/10</td>
+                            <td id="mathAverage"></td>
+                            <td id="mathProjection"></td>
+                            <td id="mathConfidence"></td>
                             <td>
-                                <div class="progressBar">
-                                    <div class="progressBarFilled">
-                                        <span class="progressBarText"></span>
-                                    </div>
-                                </div>
+                                <div class="progressBar"><div class="progressBarFilled" id="mathBar"><span class="progressBarText"></span></div></div>
                             </td>
                         </tr>
 
                         <tr>
                             <th>Music</th>
-                            <td>880</td>
-                            <td>940</td>
-                            <td>10/10</td>
+                            <td id="musicAverage"></td>
+                            <td id="musicProjection"></td>
+                            <td id="musicConfidence"></td>
                             <td>
-                                <div class="progressBar">
-                                    <div class="progressBarFilled">
-                                        <span class="progressBarText"></span>
-                                    </div>
-                                </div>
+                                <div class="progressBar"><div class="progressBarFilled" id="musicBar"><span class="progressBarText"></span></div></div>
                             </td>
                         </tr>
 
                         <tr>
                             <th>Science</th>
-                            <td>940</td>
-                            <td>1000</td>
-                            <td>10/10</td>
+                            <td id="sciAverage"></td>
+                            <td id="sciProjection"></td>
+                            <td id="sciConfidence"></td>
                             <td>
-                                <div class="progressBar">
-                                    <div class="progressBarFilled">
-                                        <span class="progressBarText"></span>
-                                    </div>
-                                </div>
+                                <div class="progressBar"><div class="progressBarFilled" id="sciBar"><span class="progressBarText"></span></div></div>
                             </td>
                         </tr>
 
                         <tr>
                             <th>Social Science</th>
-                            <td>860</td>
-                            <td>920</td>
-                            <td>8/10</td>
+                            <td id="socsciAverage"></td>
+                            <td id="socsciProjection"></td>
+                            <td id="socsciConfidence"></td>
                             <td>
-                                <div class="progressBar">
-                                    <div class="progressBarFilled">
-                                        <span class="progressBarText"></span>
-                                    </div>
-                                </div>
+                                <div class="progressBar"><div class="progressBarFilled" id="socsciBar"><span class="progressBarText"></span></div></div>
                             </td>
                         </tr>
 
                         <tr>
                             <th>Essay</th>
-                            <td>750</td>
-                            <td>800</td>
-                            <td>7/10</td>
+                            <td id="essayAverage"></td>
+                            <td id="essayProjection"></td>
+                            <td id="essayConfidence"></td>
                             <td>
-                                <div class="progressBar">
-                                    <div class="progressBarFilled">
-                                        <span class="progressBarText"></span>
-                                    </div>
-                                </div>
+                                <div class="progressBar"><div class="progressBarFilled" id="essayBar"><span class="progressBarText"></span></div></div>
                             </td>
                         </tr>
 
                         <tr>
                             <th>Interview</th>
-                            <td>N/A</td>
-                            <td>930</td>
-                            <td>6/10</td>
+                            <td id="interviewAverage"></td>
+                            <td id="interviewProjection"></td>
+                            <td id="interviewConfidence"></td>
                             <td>
-                                <div class="progressBar">
-                                    <div class="progressBarFilled">
-                                        <span class="progressBarText"></span>
-                                    </div>
-                                </div>
+                                <div class="progressBar"><div class="progressBarFilled" id="interviewBar"><span class="progressBarText"></span></div></div>
                             </td>
                         </tr>
 
                         <tr>
                             <th>Speech</th>
-                            <td>N/A</td>
-                            <td>940</td>
-                            <td>10/10</td>
+                            <td id="speechAverage"></td>
+                            <td id="speechProjection"></td>
+                            <td id="speechConfidence"></td>
                             <td>
-                                <div class="progressBar">
-                                    <div class="progressBarFilled">
-                                        <span class="progressBarText"></span>
-                                    </div>
-                                </div>
+                                <div class="progressBar"><div class="progressBarFilled" id="speechBar"><span class="progressBarText"></span></div></div>
                             </td>
                         </tr>
 
                         <tr>
                             <th>Total</th>
-                            <td>8500</td>
-                            <td>9000</td>
-                            <td>10/10</td>
+                            <td id="totalAverage"></td>
+                            <td id="totalProjection"></td>
+                            <td id="totalConfidence"></td>
                             <td>
-                                <div class="progressBar">
-                                    <div class="progressBarFilled">
-                                        <span class="progressBarText"></span>
-                                    </div>
-                                </div>
+                                <div class="progressBar"><div class="progressBarFilled" id="totalBar"><span class="progressBarText"></span></div></div>
                             </td>
                         </tr>
                     </table>
@@ -231,38 +187,13 @@
                 <!-- Testing Data -->
                 <section class="testData">
                     <h3>Recent Test Data</h3>
-                    <table>
-
+                    <table id="recentTestTable">
                         <tr>
                             <th>Subject</th>
                             <th>Section</th>
                             <th>Test Type</th>
                             <th>Score</th>
                             <th>Date</th>
-                        </tr>
-
-                        <tr>
-                            <th>Literature</th>
-                            <td>Section 1</td>
-                            <td>Demidec</td>
-                            <td>680</td>
-                            <td>6/27</td>
-                        </tr>
-
-                        <tr>
-                            <th>Math</th>
-                            <td>All</td>
-                            <td>USAD Easy</td>
-                            <td>886</td>
-                            <td>6/27</td>
-                        </tr>
-
-                        <tr>
-                            <th>Music</th>
-                            <td>All</td>
-                            <td>USAD Medium</td>
-                            <td>980</td>
-                            <td>6/24</td>
                         </tr>
                     </table>
 
@@ -300,6 +231,6 @@
      
 
     <!-- Connects JavaScript file -->
-     <script src="../js/main.js"></script>
+    <script src="../java/main.js"></script>
 
 </body>
