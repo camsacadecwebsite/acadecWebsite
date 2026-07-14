@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedSubject = parameters.get('subject');
         const selectedSection = parameters.get('section');
         const totalQQ = 5;
-        const otherSpreadsheetURL = 'https://script.google.com/macros/s/AKfycbxVjbajMXelWSKsjLshxPvtulfOkz55zxHw5eg9ifwcriKM7G-9HInaDpKLAZm3l6Kq/exec';
+        const otherSpreadsheetURL = 'https://script.google.com/macros/s/AKfycbx9DhnIcp-jITFtGqsBhsbWFr8osljeuc0F8prWO6cnVQ9wXkE2mjDgqVzRcM8WdxYBnQ/exec';
         
         // Loading the questions in
         const loadingZone = actualPracticeTestForm.querySelector('.testingButton');
@@ -350,6 +350,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     const block = document.createElement('section');
                     block.classList.add('questionBlock');
 
+                    // Add correct answer part
+                    let correctTextValue = "";
+                    if (q.correctAnswer === "A") {
+                        correctTextValue = q.optionA;
+                    }
+                    if (q.correctAnswer === "B") {
+                        correctTextValue = q.optionB;
+                    }
+                    if (q.correctAnswer === "C") {
+                        correctTextValue = q.optionC;
+                    }
+                    if (q.correctAnswer === "D") {
+                        correctTextValue = q.optionD;
+                    }
+
+                    block.setAttribute('correctLetter', q.correctAnswer);
+                    block.setAttribute('correctText', correctTextValue);
+
                     block.innerHTML = `
                         <h3 class="questionText">Question ${i + 1}: ${q.questionText}</h3>
                         <div class="questionOptions">
@@ -398,12 +416,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const questionBlocks = actualPracticeTestForm.querySelectorAll('.questionBlock');
             const results = [];
+            const alertMessageDetails = "";
 
             // Create the block for chosen answers and stuff
             for (let i = 0; i < questionBlocks.length; i++) {
                 const currentBlock = questionBlocks[i];
                 const questionText = currentBlock.querySelector('.questionText').textContent;
                 
+                // Added correct stuff
+                const correctLetter = currentBlock.getAttribute('correctLetter');
+                const correctText = currentBlock.getAttribute('correctText');
+
                 const selectedOption = currentBlock.querySelector('input[name="question_' + i + '"]:checked');
                 var chosenAnswer;
                 if (selectedOption) {
@@ -412,6 +435,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     chosenAnswer = "Nothing Selected"
                 }
 
+                // Added correct stuff
+                var correct = false;
+                if (chosenAnswer === correctText) {
+                    correct = true;
+                }
+
+                var scoreCorrectOrIncorrect = correct;
 
                 const optionLabels = currentBlock.querySelectorAll('.possibleOptionText');
                 const optionsList = [];
@@ -419,7 +449,36 @@ document.addEventListener('DOMContentLoaded', () => {
                     optionsList.push(option.textContent.trim());
                 }
 
-                results.push(questionText + " Options: " + optionsList.join(', ') + " Chosen: " + chosenAnswer);
+                results.push(questionText + " Options: " + optionsList.join(', ') + " Chosen: " + chosenAnswer + " Correct/Incorrect: " + scoreCorrectOrIncorrect + " Correct Letter: " + correctLetter);
+            
+            var questionHeading = currentBlock.querySelector('.questionText');
+                if (correct) {
+                    questionHeading.innerHTML += ' <span style="color: #2ecc71; margin-left: 10px; font-weight: bold;">Correct</span>';
+                } else {
+                    questionHeading.innerHTML += ' <span style="color: #e74c3c; margin-left: 10px; font-weight: bold;">Incorrect</span>';
+                }
+
+                var answerInputs = currentBlock.querySelectorAll('input[type="radio"]');
+                for (var r = 0; r < answerInputs.length; r++) {
+                    answerInputs[r].disabled = true;
+                    
+                    var parentLabel = answerInputs[r].closest('.possibleOption');
+                    var optionValue = answerInputs[r].value;
+
+                    // Correct Answer
+                    if (optionValue === correctText) {
+                        parentLabel.querySelector('.possibleOptionText').style.color = "#27ae60";
+                        parentLabel.querySelector('.possibleOptionText');
+                        parentLabel.querySelector('.possibleOptionText').innerHTML += ' (Correct Choice)';
+                    }
+
+                    // Incorrect Answer
+                    if (optionValue === chosenAnswer && optionValue !== correctText) {
+                        parentLabel.querySelector('.possibleOptionText').style.color = "#c0392b";
+                        parentLabel.querySelector('.possibleOptionText');
+                        parentLabel.querySelector('.possibleOptionText').innerHTML += ' (Your Choice)';
+                    }
+                }
             }
 
             // Creating results data
@@ -437,8 +496,17 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(res => res.json())
             .then(data => {
-                alert('YAYAYAYAY YOU FINISHED!!!');
-                window.location.href = 'tests.html';
+                // Exit Button
+                var exitButton = actualPracticeTestForm.querySelector('button[type="submit"]') || actualPracticeTestForm.querySelector('.testingButton button');
+                if (exitButton) {
+                    exitButton.outerHTML = '<button type="button" onclick="window.location.href=\'tests.html\'" style="background-color: #e8f0fe; color: #1a73e8; display: block; text-align: center; font-weight: 600; font-size: 0.9rem; text-decoration: none; padding: 12px; border-radius: 8px; border: none; cursor: pointer; margin-top: auto;">Return to Testing Portal</button>';
+                } else {
+                    var exitContainer = document.createElement('div');
+                    exitContainer.style.textAlign = 'center';
+                    exitContainer.style.marginTop = '20px';
+                    exitContainer.innerHTML = '<button type="button" onclick="window.location.href=\'tests.html\'" style="background-color: #e8f0fe; color: #1a73e8; display: block; text-align: center; font-weight: 600; font-size: 0.9rem; text-decoration: none; padding: 12px; border-radius: 8px; border: none; cursor: pointer; margin-top: auto;">Return to Testing Portal</button>';
+                    actualPracticeTestForm.appendChild(exitContainer);
+                }
             })
             .catch(err => {
                 console.error(err);
