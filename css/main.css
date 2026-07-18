@@ -49,6 +49,7 @@ body {
     display: flex;
     list-style: none; /* No bullet points */
     align-items: center;
+    width: 100%;
     margin: 0; 
     padding: 0; 
     gap: 1.5rem; /* 1.5rem gap between each subject */
@@ -716,3 +717,8 @@ tr:nth-of-type(12) .progressBarFilled { width: 90%; }
     border-radius: 8px;
 }
 
+/* Login Stuff */
+.loginStuff {
+    margin-left: auto;
+    padding-right: 20px;
+}

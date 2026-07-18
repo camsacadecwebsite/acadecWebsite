@@ -636,4 +636,90 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
+    // LOGIN STUFF
+    var loginButton = document.getElementById('loginButton');
+
+    if (loginButton) {
+        var currentUser = localStorage.getItem('activeHubUser');
+        if (currentUser) {
+            loginButton.textContent = currentUser;
+        }
+
+        loginButton.addEventListener('click', function(event) {
+            event.preventDefault();
+
+            var isBoxOpen = document.getElementById('loginFormBox');
+            if (isBoxOpen) {
+                isBoxOpen.remove();
+                return;
+            }
+
+            var loginBox = document.createElement('div');
+            loginBox.id = 'loginFormBox';
+            
+            // CSS Stuff
+            loginBox.style.position = "absolute";
+            loginBox.style.right = "20px";
+            loginBox.style.top = "60px";
+            loginBox.style.backgroundColor = "#ffffff";
+            loginBox.style.border = "1px solid #cfd4de";
+            loginBox.style.borderRadius = "8px";
+            loginBox.style.padding = "16px";
+            loginBox.style.width = "220px";
+
+            var activeCurrentUser = localStorage.getItem('activeHubUser');
+
+            if (activeCurrentUser) { // CSS Stuff for Signing out
+                loginBox.innerHTML =  `
+                    <p style="margin: 0 0 12px 0; text-align: center;">Currently logged in as ${activeCurrentUser}</p>
+                    <p style="margin: 0 0 12px 0; text-align: center;">Do you wanna sign out?</p>
+                    <button type="button" id="logoutSubmitButton" style="width: 100%; background-color: #ffffff; padding: 8px; border-radius: 6px; cursor: pointer;">Sign Out</button>
+                `;
+
+                loginButton.parentElement.appendChild(loginBox);
+
+                var clearSessionButton = document.getElementById('logoutSubmitButton');
+                clearSessionButton.addEventListener('click', function() {
+                    loginBox.innerHTML = '<p style="margin: 0; text-align: center;">You logged out :D</p>';
+                    
+                    localStorage.removeItem('activeHubUser');
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 1200);
+                });
+
+            } else { // CSS Stuff for Signing in
+                loginBox.innerHTML = `
+                <label style="display: block; margin-bottom: 6px;">Enter Code: </label>
+                <input type="password" id="loginCodeInput" style="width: 100%; height: 30px; padding: 4px 8px; border: 1px solid #cdcdcdff; border-radius: 6px; margin-bottom: 12px;">
+                <button type="button" id="loginSubmitButton" style="width: 100%; background-color: #ffffff; padding: 8px; border-radius: 6px; cursor: pointer;">Submit</button>
+                `;
+
+                loginButton.parentElement.appendChild(loginBox);
+
+                var processCodeButton = document.getElementById('loginSubmitButton');
+                processCodeButton.addEventListener('click', function() {
+                    var typedKey = document.getElementById('loginCodeInput').value;
+                    var profileHolder = "";
+                    if (typedKey === "1234") {
+                        profileHolder = "Lauren Kim";
+                    } else if (typedKey === "4321") {
+                        profileHolder = "Person 1";
+                    }
+
+                    if (profileHolder !== "") {
+                        loginBox.innerHTML = '<p margin: 0; text-align: center;">Welcome back, ' + profileHolder + '!</p>';
+                        
+                        localStorage.setItem('activeHubUser', profileHolder);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 1200);
+                    } else {
+                        alert("Wrong password sonion ring");
+                    }
+                });
+            }
+        });
+    }
+
 });
