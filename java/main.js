@@ -172,8 +172,25 @@ document.addEventListener('DOMContentLoaded', () => {
             const allTests = testList.join('\n');
             formData.append('practiceTests', allTests);
 
+            // Logged in stuff
+            var loggedInUser = localStorage.getItem('activeHubUser');
+            if (loggedInUser) {
+                var idNumber;
+
+                if (loggedInUser === "Lauren Kim") {
+                    idNumber = 1234;
+                } else if (loggedInUser === "Person 1") {
+                    idNumber = 4321;
+                }
+
+                formData.append('loginID', idNumber)
+
+            } else {
+                formData.append('loginID', "You aren't logged in!")
+            }
+
             // SEND EVERYTHING TO SPREADSHEET
-            const spreadsheetLink = 'https://script.google.com/macros/s/AKfycbwiUwDUSmkiTzkyAINbts1-WFV1IcjToORc2CK3yytHQwZRuD9iWfNuPFYJzdZlH-8LSA/exec'; 
+            const spreadsheetLink = 'https://script.google.com/macros/s/AKfycbxCHboRJZTaDNygyE45tZhe1q4z4OYHuB7zruVa4Ag9jTr-Y-rWc79VoPuP2l8ZqS9O/exec'; 
 
             fetch(spreadsheetLink, {
                 method: 'POST',
@@ -418,6 +435,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const results = [];
             const alertMessageDetails = "";
 
+            const totalQuestionsCount = questionBlocks.length;
+            var correctAnswersCount = 0;
+
             // Create the block for chosen answers and stuff
             for (let i = 0; i < questionBlocks.length; i++) {
                 const currentBlock = questionBlocks[i];
@@ -439,6 +459,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 var correct = false;
                 if (chosenAnswer === correctText) {
                     correct = true;
+                    correctAnswersCount = correctAnswersCount + 1;
                 }
 
                 var scoreCorrectOrIncorrect = correct;
@@ -481,6 +502,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
+            // Percentage stuff
+            var calculatedPercent = 0;
+            if (totalQuestionsCount > 0) {
+                calculatedPercent = Math.round((correctAnswersCount / totalQuestionsCount) * 100);
+            }
+
+            // Logged in stuff
+            var loggedInUser = localStorage.getItem('activeHubUser');
+            if (loggedInUser) {
+                var idNumber;
+
+                if (loggedInUser === "Lauren Kim") {
+                    idNumber = 1234;
+                } else if (loggedInUser === "Person 1") {
+                    idNumber = 4321;
+                }
+
+            } else {
+                idNumber = "You're not logged in!";
+            }
+
+
             // Creating results data
             const resultsData = new FormData();
             resultsData.append('submissionType', 'testResult');
@@ -488,7 +531,12 @@ document.addEventListener('DOMContentLoaded', () => {
             resultsData.append('section', selectedSection || 'Unknown');
             resultsData.append('answersSummary', results.join('\n'));
 
-            const answersToSpreadsheet = 'https://script.google.com/macros/s/AKfycbw2nGemnwlEMBUWO1AzP1j4VSD8-0XeMYKTwjciWHw40OnJff-axVRQWVxZi8bqF1MJ6w/exec';
+            resultsData.append('numberOfQuestions', totalQuestionsCount);
+            resultsData.append('correctAnswersCount', correctAnswersCount);
+            resultsData.append('testPercentageScore', calculatedPercent + "%");
+            resultsData.append('loginID', idNumber);
+
+            const answersToSpreadsheet = 'https://script.google.com/macros/s/AKfycbx8Mi0HYJ8a5J7fk7OQEHQ7D0EXmbNYXWDpsNnBwjIAnJ0lDOmCDNmUvF8tyR1afQ6EDQ/exec';
 
             fetch(answersToSpreadsheet, {
                 method: 'POST',
