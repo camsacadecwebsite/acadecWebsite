@@ -570,9 +570,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // ANALYTICS STUFF
     var overallScoreDisplay = document.getElementById('overallScoreDisplay')
     if (overallScoreDisplay) {
-        var analyticsSpreadsheet = 'https://script.google.com/macros/s/AKfycbxsejvlWZNucqTMJCrXjOeD7i0Jv03MkG_ii3d3BSKK8N_HYRuIbO8FMjHU6SzPaqZh/exec'
+        var analyticsSpreadsheet = 'https://script.google.com/macros/s/AKfycbzw08f9eVhyW_cHaQKexDR_DFu4OV-5kfTJD4qBWlLWA2GwV0EeRBKQkotEOvOjkI73/exec';
+        var loggedInUser = localStorage.getItem('activeHubUser');
+        var idNumber = "";
 
-        fetch(analyticsSpreadsheet)
+        if (loggedInUser === "Lauren Kim") {
+            idNumber = 1234;
+        } else if (loggedInUser === "Person 1") {
+            idNumber = 4321;
+        }
+
+        console.log("Logged in user:", loggedInUser);
+        console.log("ID number:", idNumber);
+
+        fetch(
+            analyticsSpreadsheet + "?id=" + encodeURIComponent(idNumber)
+        )
         .then(function(res) {
             return res.json();
         })
