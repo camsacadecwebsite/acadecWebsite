@@ -580,9 +580,6 @@ document.addEventListener('DOMContentLoaded', () => {
             idNumber = 4321;
         }
 
-        console.log("Logged in user:", loggedInUser);
-        console.log("ID number:", idNumber);
-
         fetch(
             analyticsSpreadsheet + "?id=" + encodeURIComponent(idNumber)
         )
