@@ -274,11 +274,17 @@ document.addEventListener('DOMContentLoaded', () => {
             if (practiceTestForm) {
                 const subjectSelected = practiceTestForm.querySelector('[name="practiceTestSubject"]');
                 const sectionSelected = practiceTestForm.querySelector('[name="practiceTestSection"]');
+                const difficultySelected = document.getElementById('testDifficulty');
                 
                 // If youput stuff
                 if (subjectSelected && sectionSelected) {
                     const subject = subjectSelected.value;
                     const section = sectionSelected.value;
+                    if (difficultySelected) {
+                        const difficulty = difficultySelected;
+                    } else {
+                        const difficulty = 5;
+                    }
                     
                     // Check if you put the stuff
                     if (!subject || !section) {
@@ -301,7 +307,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedSubject = parameters.get('subject');
         const selectedSection = parameters.get('section');
         const totalQQ = 5;
-        const otherSpreadsheetURL = 'https://script.google.com/macros/s/AKfycbx9DhnIcp-jITFtGqsBhsbWFr8osljeuc0F8prWO6cnVQ9wXkE2mjDgqVzRcM8WdxYBnQ/exec';
+        const difficultyParameter = parseInt(parameters.get('difficulty'));
+        if (difficultyParameter) {
+            const selectedDifficulty = difficultyParameter;
+        } else {
+            const selectedDifficulty = 5;
+        }
+
+        const otherSpreadsheetURL = 'https://script.google.com/macros/s/AKfycbyk0emzKP6bfagxFIxr0O5ll2h-eY9_qJuQTqP4Ml4Dkh9wgwhPa28VhQYB48OeCGemiA/exec';
         
         // Loading the questions in
         const loadingZone = actualPracticeTestForm.querySelector('.testingButton');
@@ -335,12 +348,43 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
+                let selectedDifficulty;
+                if (difficultyParameter) {
+                    selectedDifficulty = difficultyParameter;
+                } else {
+                    selectedDifficulty = 5;
+                }
+
+                let minimumDifficulty;
+                let maximumDifficulty;
+
                 // Filter everything + make sure its lowercase
+                if (selectedDifficulty == 1 || selectedDifficulty == 2) {
+                    minimumDifficulty = 1;
+                } else {
+                    minimumDifficulty = selectedDifficulty - 2;
+                }
+
+                if (selectedDifficulty == 9 || selectedDifficulty == 10) {
+                    maximumDifficulty = 10;
+                } else {
+                    maximumDifficulty = selectedDifficulty + 2;
+                }
+
                 let poolOfQQ = [];
                 for (let i = 0; i < data.questions.length; i++) {
                     let q = data.questions[i];
                     if (q.subject && q.section) {
-                        if (q.subject.toLowerCase() === selectedSubject.toLowerCase() && q.section.toLowerCase() === selectedSection.toLowerCase()) {
+                        const questionDifficulty = parseInt(q.difficulty, 10)
+                        const subjectMatches = q.subject.toLowerCase() === selectedSubject.toLowerCase();
+                        const sectionMatches = q.section.toLowerCase() === selectedSection.toLowerCase();
+                        if (questionDifficulty >= minimumDifficulty && questionDifficulty <= maximumDifficulty) {
+                            difficultyInRange = true;
+                        } else {
+                            difficultyInRange = false;
+                        }
+
+                        if (subjectMatches && sectionMatches && difficultyInRange) {
                             poolOfQQ.push(q);
                         }
                     }
