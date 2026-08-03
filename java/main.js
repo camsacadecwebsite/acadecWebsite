@@ -1,5 +1,55 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    // Non ugly alerts code
+    function showAlert(message) {
+        const existingAlert = document.getElementById('customAlert');
+
+        if (existingAlert) {
+            existingAlert.remove()
+        }
+
+        const overlay = document.createElement('div');
+        overlay.id = 'customAlertOverlay';
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.4)';
+        overlay.style.display = 'flex';
+        overlay.style.justifyContent = 'center';
+        overlay.style.alignItems = 'center';
+
+        const alertBox = document.createElement('div');
+        alertBox.style.backgroundColor = '#ffffff';
+        alertBox.style.borderRadius = '12px';
+        alertBox.style.padding = '24px';
+        alertBox.style.width = '90%';
+        alertBox.style.maxWidth = '350px';
+        alertBox.style.textAlign = 'center';
+
+        const messageText = document.createElement('p');
+        messageText.textContent = message;
+        messageText.style.marginBottom = '20px';
+
+        const closeButton = document.createElement('button');
+        closeButton.textContent = 'Close Alert';
+        closeButton.style.padding = '12px';
+        closeButton.style.borderRadius = '8px';
+        closeButton.style.cursor = 'pointer';
+
+        closeButton.addEventListener('click', () => {
+            overlay.remove();
+        });
+
+        alertBox.appendChild(messageText);
+        alertBox.appendChild(closeButton);
+        overlay.appendChild(alertBox);
+        document.body.appendChild(overlay); 
+    }
+
+
+
     // DISPLAY HOURS STUDIED 
     // Slider and Display
     const hoursSlider = document.getElementById('hoursStudied');
@@ -123,6 +173,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('checkInForm') // Load form in
 
     if (form) {
+        // Sunday stuff
+        var loggedInUser = localStorage.getItem('activeHubUser');
+        var lastCheckIn = localStorage.getItem('lastCheckInDate');
+        var submitButton = document.getElementById('submitForm');
+
+        function getLastSunday() {
+            var date = new Date();
+            date.setDate(date.getDate() - date.getDay());
+            date.setHours(0,0,0,0);
+            return date.getTime();
+        }
+
+        var lastSunday = getLastSunday();
+
+        // If not logged in + Sunday stuff
+        if (!loggedInUser) {
+            showAlert("You have to log in!")
+        } else if (lastCheckIn && parseInt(lastCheckIn) > lastSunday) {
+            showAlert("You already submitted your check in!")
+            if (submitButton) {
+                submitButton.disabled = true;
+            }
+
+        }
+
         form.addEventListener('submit', function(e) { 
             e.preventDefault();
 
@@ -199,6 +274,11 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.json())
             .then(data => {
                 if (data.result === 'success') {
+                    localStorage.setItem('lastCheckInDate', Datae.now().toString());
+                    showAlert("You have successfully submitted!")
+                    if (submitButton) {
+                        submitButton.disabled = true;
+                    }
                     form.reset();
                     document.getElementById('addPracticeTestSection').innerHTML = ''; 
                 }
@@ -270,6 +350,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const startTestButton = document.getElementById('startTestButton');
     if (startTestButton) {
         startTestButton.addEventListener('click', () => {
+
+            // Logged in stuff
+            var loggedInUser = localStorage.getItem('activeHubUser');
+            if (!loggedInUser) {
+                showAlert("You need to log in before taking a practice test!")
+                return;
+            }
+
             const practiceTestForm = document.getElementById('practiceTestForm');
             if (practiceTestForm) {
                 const subjectSelected = practiceTestForm.querySelector('[name="practiceTestSubject"]');
@@ -288,7 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     // Check if you put the stuff
                     if (!subject || !section) {
-                        alert("Sonion ring you forgot smth");
+                        showAlert("You forgot to put something!")
                         return;
                     }
 
@@ -817,7 +905,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             window.location.reload();
                         }, 1200);
                     } else {
-                        alert("Wrong password sonion ring");
+                        showAlert("Wrong password!")
                     }
                 });
             }
