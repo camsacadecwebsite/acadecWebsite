@@ -274,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.json())
             .then(data => {
                 if (data.result === 'success') {
-                    localStorage.setItem('lastCheckInDate', Datae.now().toString());
+                    localStorage.setItem('lastCheckInDate', Date.now().toString());
                     showAlert("You have successfully submitted!")
                     if (submitButton) {
                         submitButton.disabled = true;
