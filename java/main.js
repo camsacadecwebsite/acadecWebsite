@@ -48,6 +48,53 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(overlay); 
     }
 
+    function checkUser(passwordInput) {
+        const processCodeButton = document.getElementById('loginSubmitButton');
+        if (processCodeButton) {
+            processCodeButton.distabled = true;
+            processCodeButton.textContext = "Verifying your password...."
+        }
+
+
+        const passwordURL = 'https://script.google.com/macros/s/AKfycbxgmhpXaSRFlN3rX--i-nSizaguU7F9qykBkjyGzfnx6Pa-sYwGfwiZNb3L1o849zTp/exec';
+  
+        const formData = new FormData();
+        formData.append('password', passwordInput);
+
+        fetch(passwordURL, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.result === 'success') {
+            localStorage.setItem('activeHubUser', data.userName);
+            localStorage.setItem('activeHubID', data.idNumber);
+
+            var loginBox = document.getElementById('loginFormBox');
+            if (loginBox) {
+                loginBox.innerHTML = '<p style="margin: 0; text-align: center;">Welcome ' + data.userName + '!</p>';
+            }
+            setTimeout(function() {
+                window.location.reload();
+            }, 1200);
+            } else {
+            showAlert("Login failed: " + data.message);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            showAlert("Password failed for an unknown reason, try again!");
+        })
+        .finally(() => {
+            if (processCodeButton) {
+                processCodeButton.disabled = false;
+                processCodeButton.textContent = "Submit";
+            }
+        });
+
+    }
+
 
 
     // DISPLAY HOURS STUDIED 
@@ -173,33 +220,51 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('checkInForm') // Load form in
 
     if (form) {
-        // Sunday stuff
         var loggedInUser = localStorage.getItem('activeHubUser');
-        var lastCheckIn = localStorage.getItem('lastCheckInDate');
+        var activeHubID = localStorage.getItem('activeHubID');
         var submitButton = document.getElementById('submitForm');
+
+        let lastCheckin = null;
+        if (activeHubID) {
+            const storageKey = `lastCheckInDate_${activeHubID}`;
+            lastCheckin = localStorage.getItem(storageKey);
+        }
 
         function getLastSunday() {
             var date = new Date();
             date.setDate(date.getDate() - date.getDay());
-            date.setHours(0,0,0,0);
+            date.setHours(0, 0, 0, 0);
             return date.getTime();
         }
 
         var lastSunday = getLastSunday();
 
-        // If not logged in + Sunday stuff
         if (!loggedInUser) {
-            showAlert("You have to log in!")
-        } else if (lastCheckIn && parseInt(lastCheckIn) > lastSunday) {
-            showAlert("You already submitted your check in!")
+            showAlert("You have to log in!");
+        } 
+        else if (lastCheckin && parseInt(lastCheckin, 10) >= lastSunday) {
+            showAlert("You already submitted your check in for this week!");
             if (submitButton) {
                 submitButton.disabled = true;
             }
-
         }
 
         form.addEventListener('submit', function(e) { 
             e.preventDefault();
+
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.textContent = "Submitting, please wait..."
+            }
+
+            var loggedInUser = localStorage.getItem('activeHubUser');
+            if (!loggedInUser) {
+                showAlert("You have to log in before submitting!");
+                submitButton.disabled = false;
+                submitButton.textContent = "Submit Form"
+                return;
+            }
+            
 
             const formData = new FormData(form);
 
@@ -248,20 +313,11 @@ document.addEventListener('DOMContentLoaded', () => {
             formData.append('practiceTests', allTests);
 
             // Logged in stuff
-            var loggedInUser = localStorage.getItem('activeHubUser');
-            if (loggedInUser) {
-                var idNumber;
-
-                if (loggedInUser === "Lauren Kim") {
-                    idNumber = 1234;
-                } else if (loggedInUser === "Person 1") {
-                    idNumber = 4321;
-                }
-
-                formData.append('loginID', idNumber)
-
+            var idNumber = localStorage.getItem('activeHubID');
+            if (idNumber) {
+                formData.append('loginID', idNumber);
             } else {
-                formData.append('loginID', "You aren't logged in!")
+                formData.append('loginID', " You aren't logged in!");
             }
 
             // SEND EVERYTHING TO SPREADSHEET
@@ -280,10 +336,22 @@ document.addEventListener('DOMContentLoaded', () => {
                         submitButton.disabled = true;
                     }
                     form.reset();
+                    if (submitButton) {
+                        submitButton.disabled = false;
+                    }
                     document.getElementById('addPracticeTestSection').innerHTML = ''; 
                 }
+            })
+            .catch(err => {
+                console.error(err);
+                showAlert("Submission error. Please try again.");
+            })
+            .finally(() => {
+                if (submitButton && !localStorage.getItem('lastCheckinDate')) {
+                    submitButton.disabled = false;
+                    submitButton.textContent = "Submit";
+                }
             });
-
         });
     }
 
@@ -404,8 +472,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const otherSpreadsheetURL = 'https://script.google.com/macros/s/AKfycbyk0emzKP6bfagxFIxr0O5ll2h-eY9_qJuQTqP4Ml4Dkh9wgwhPa28VhQYB48OeCGemiA/exec';
         
+
         // Loading the questions in
         const loadingZone = actualPracticeTestForm.querySelector('.testingButton');
+        const quizSubmitButton = loadingZone ? loadingZone.querySelector('button') : null;
+        if (quizSubmitButton) {
+            quizSubmitButton.disabled = true;
+            quizSubmitButton.textContent = "Loading the test...";
+        }
+
         actualPracticeTestForm.innerHTML = '<p id="loadingStatus">Loading test...</p>';
         if (loadingZone) {
             actualPracticeTestForm.appendChild(loadingZone);
@@ -551,6 +626,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         actualPracticeTestForm.appendChild(block);
                     }
                 });
+
+                if (quizSubmitButton) {
+                    quizSubmitButton.disabled = false;
+                    quizSubmitButton.textContent = "Submit Quiz";
+                }
+
+
             })
             .catch(err => {
                 console.error(err);
@@ -562,6 +644,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Finishing the test
         actualPracticeTestForm.addEventListener('submit', (e) => {
             e.preventDefault();
+
+            const submitButton = actualPracticeTestForm.querySelector('button[type="submit"]');
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.textContent = "Submitting Results...";
+            }
 
             const questionBlocks = actualPracticeTestForm.querySelectorAll('.questionBlock');
             const results = [];
@@ -640,24 +728,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 calculatedPercent = Math.round((correctAnswersCount / totalQuestionsCount) * 100);
             }
 
-            // Logged in stuff
-            var loggedInUser = localStorage.getItem('activeHubUser');
-            if (loggedInUser) {
-                var idNumber;
-
-                if (loggedInUser === "Lauren Kim") {
-                    idNumber = 1234;
-                } else if (loggedInUser === "Person 1") {
-                    idNumber = 4321;
-                }
-
-            } else {
-                idNumber = "You're not logged in!";
-            }
-
-
             // Creating results data
             const resultsData = new FormData();
+
+            // Logged in stuff
+            var idNumber = localStorage.getItem('activeHubID');
+            if (!idNumber) {
+                idNumber = "You aren't logged in!"
+            }
+            resultsData.append('loginID', idNumber);
+
             resultsData.append('submissionType', 'testResult');
             resultsData.append('subject', selectedSubject || 'Unknown');
             resultsData.append('section', selectedSection || 'Unknown');
@@ -681,11 +761,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (exitButton) {
                     exitButton.outerHTML = '<button type="button" onclick="window.location.href=\'tests.html\'" style="background-color: #e8f0fe; color: #1a73e8; display: block; text-align: center; font-weight: 600; font-size: 0.9rem; text-decoration: none; padding: 12px; border-radius: 8px; border: none; cursor: pointer; margin-top: auto;">Return to Testing Portal</button>';
                 } else {
-                    var exitContainer = document.createElement('div');
-                    exitContainer.style.textAlign = 'center';
-                    exitContainer.style.marginTop = '20px';
-                    exitContainer.innerHTML = '<button type="button" onclick="window.location.href=\'tests.html\'" style="background-color: #e8f0fe; color: #1a73e8; display: block; text-align: center; font-weight: 600; font-size: 0.9rem; text-decoration: none; padding: 12px; border-radius: 8px; border: none; cursor: pointer; margin-top: auto;">Return to Testing Portal</button>';
-                    actualPracticeTestForm.appendChild(exitContainer);
+                    if (submitButton) {
+                        submitButton.outerHTML = '<button type="button" onclick="window.location.href=\'tests.html\'" style="...">Return to Testing Portal</button>';
+                    }
                 }
             })
             .catch(err => {
@@ -693,7 +771,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (statusText) {
                     statusText.textContent = ('Your network got cooked, sorry :(');
                 }
-                window.location.href = 'tests.html';
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.textContent = "Try to submit again"
+                }
             });
         });
 
@@ -703,13 +784,9 @@ document.addEventListener('DOMContentLoaded', () => {
     var overallScoreDisplay = document.getElementById('overallScoreDisplay')
     if (overallScoreDisplay) {
         var analyticsSpreadsheet = 'https://script.google.com/macros/s/AKfycbzw08f9eVhyW_cHaQKexDR_DFu4OV-5kfTJD4qBWlLWA2GwV0EeRBKQkotEOvOjkI73/exec';
-        var loggedInUser = localStorage.getItem('activeHubUser');
-        var idNumber = "";
-
-        if (loggedInUser === "Lauren Kim") {
-            idNumber = 1234;
-        } else if (loggedInUser === "Person 1") {
-            idNumber = 4321;
+        var idNumber = localStorage.getItem('activeHubID');
+        if (!idNumber) {
+            idNumber = "You aren't logged in!"
         }
 
         fetch(
@@ -873,6 +950,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     loginBox.innerHTML = '<p style="margin: 0; text-align: center;">You logged out :D</p>';
                     
                     localStorage.removeItem('activeHubUser');
+                    localStorage.removeItem('activHubID');
                     setTimeout(function() {
                         window.location.reload();
                     }, 1200);
@@ -889,24 +967,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 var processCodeButton = document.getElementById('loginSubmitButton');
                 processCodeButton.addEventListener('click', function() {
-                    var typedKey = document.getElementById('loginCodeInput').value;
-                    var profileHolder = "";
-                    if (typedKey === "1234") {
-                        profileHolder = "Lauren Kim";
-                    } else if (typedKey === "4321") {
-                        profileHolder = "Person 1";
+                    var typedKeyInput = document.getElementById('loginCodeInput').value.trim();
+
+                    if (!typedKeyInput) {
+                        showAlert("Enter your code.")
+                        return;
                     }
 
-                    if (profileHolder !== "") {
-                        loginBox.innerHTML = '<p margin: 0; text-align: center;">Welcome back, ' + profileHolder + '!</p>';
-                        
-                        localStorage.setItem('activeHubUser', profileHolder);
-                        setTimeout(function() {
-                            window.location.reload();
-                        }, 1200);
-                    } else {
-                        showAlert("Wrong password!")
-                    }
+                    checkUser(typedKeyInput);
                 });
             }
         });

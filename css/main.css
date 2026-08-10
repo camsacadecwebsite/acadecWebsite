@@ -694,12 +694,14 @@ tr:nth-of-type(12) .progressBarFilled { width: 90%; }
 
 /* Add practice test button */
 .addPracticeTestButton {
-    height: 30px;
-    padding: 0 6px;
-    border: 1px solid #cecece;
-    border-radius: 6px;
-    width: 150px;
-
+    background-color: #e8f0fe;
+    color: #1a73e8;
+    border: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
 }
 
 /* Individual Aspects of Taking Practice Test */
