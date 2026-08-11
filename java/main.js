@@ -95,6 +95,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
+    // Shuffling questions
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
 
 
     // DISPLAY HOURS STUDIED 
@@ -214,6 +222,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         updateDifficulty(); // Constantly update the display when event listener is triggered
         testDifficulty.addEventListener('input', updateDifficulty);
+    }
+
+    // Display Question Counter for Test
+    const questionCountSlider = document.getElementById('testQuestionsCount');
+    const questionCountDisplay = document.getElementById('testQuestionsDisplay');
+    if (questionCountSlider && questionCountDisplay) {
+        const updateQCount = () => {
+        questionCountDisplay.textContent = `Questions: ${questionCountSlider.value}`;
+    };
+        updateQCount();
+        questionCountSlider.addEventListener('input', updateQCount);
     }
 
     // COMBINE STUFF FOR SECTIONS + PRACTICE TESTS
@@ -349,7 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .finally(() => {
                 if (submitButton && !localStorage.getItem('lastCheckinDate')) {
                     submitButton.disabled = false;
-                    submitButton.textContent = "Submit";
+                    submitButton.textContent = "Submit Form";
                 }
             });
         });
@@ -431,16 +450,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 const subjectSelected = practiceTestForm.querySelector('[name="practiceTestSubject"]');
                 const sectionSelected = practiceTestForm.querySelector('[name="practiceTestSection"]');
                 const difficultySelected = document.getElementById('testDifficulty');
+                const questionCountSelected = document.getElementById('testQuestionsCount');
                 
                 // If youput stuff
                 if (subjectSelected && sectionSelected) {
                     const subject = subjectSelected.value;
                     const section = sectionSelected.value;
-                    if (difficultySelected) {
-                        const difficulty = difficultySelected;
-                    } else {
-                        const difficulty = 5;
-                    }
+                    const difficulty = difficultySelected ? difficultySelected.value : 5;
+                    const questionCount = questionCountSelected ? questionCountSelected.value : 5;
                     
                     // Check if you put the stuff
                     if (!subject || !section) {
@@ -449,7 +466,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     // Redirect user
-                    window.location.href = `testingPortal.html?subject=${encodeURIComponent(subject)}&section=${encodeURIComponent(section)}`;
+                    window.location.href = `testingPortal.html?subject=${encodeURIComponent(subject)}&section=${encodeURIComponent(section)}&difficulty=${encodeURIComponent(difficulty)}&qCount=${encodeURIComponent(questionCount)}`;
                 }
             }
         });
@@ -462,7 +479,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const parameters = new URLSearchParams(window.location.search);
         const selectedSubject = parameters.get('subject');
         const selectedSection = parameters.get('section');
-        const totalQQ = 5;
+        const qCountParameter = parseInt(parameters.get('qCount'), 10);
+        const totalQQ = !isNaN(qCountParameter) && qCountParameter > 0 ? qCountParameter : 5;
         const difficultyParameter = parseInt(parameters.get('difficulty'));
         if (difficultyParameter) {
             const selectedDifficulty = difficultyParameter;
@@ -540,7 +558,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (q.subject && q.section) {
                         const questionDifficulty = parseInt(q.difficulty, 10)
                         const subjectMatches = q.subject.toLowerCase() === selectedSubject.toLowerCase();
-                        const sectionMatches = q.section.toLowerCase() === selectedSection.toLowerCase();
+
+                        const currentSection = q.section.toLowerCase();
+                        const targetSection = selectedSection.toLowerCase();
+
+                        let sectionMatches = false;
+                        if (targetSection === 'fulltest') {
+                            sectionMatches = true; 
+                        } else if (currentSection === targetSection) {
+                            sectionMatches = true;
+                        }
+
                         if (questionDifficulty >= minimumDifficulty && questionDifficulty <= maximumDifficulty) {
                             difficultyInRange = true;
                         } else {
@@ -564,7 +592,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Get random questions
                 poolOfQQ.sort(() => 0.5 - Math.random());
                 const activeQuizSet = poolOfQQ.slice(0, totalQQ);
-                
+
                 if (statusText) {
                     statusText.remove();
                 }
@@ -588,36 +616,36 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (q.correctAnswer === "D") {
                         correctTextValue = q.optionD;
                     }
+                    
 
                     block.setAttribute('correctLetter', q.correctAnswer);
                     block.setAttribute('correctText', correctTextValue);
 
+                    let optionsList = [
+                        { value: q.optionA },
+                        { value: q.optionB },
+                        { value: q.optionC },
+                        { value: q.optionD }
+                        ];
+                    shuffleArray(optionsList);
+
+                    const optionLetters = ['A', 'B', 'C', 'D'];
+                    let optionsHTML = '';
+
+                    optionsList.forEach((j, k) => {
+                    optionsHTML += `
+                        <div class="questionOptions">
+                        <label class="possibleOption">
+                            <input type="radio" name="question_${i}" value="${j.value}" required>
+                            <span class="possibleOptionText">${optionLetters[k]}. ${j.value}</span>
+                        </label>
+                        </div>
+                    `;
+                    });
+
                     block.innerHTML = `
                         <h3 class="questionText">Question ${i + 1}: ${q.questionText}</h3>
-                        <div class="questionOptions">
-                            <label class="possibleOption">
-                                <input type="radio" name="question_${i}" value="${q.optionA}" required>
-                                <span class="possibleOptionText">A. ${q.optionA}</span>
-                            </label>
-                        </div>
-                        <div class="questionOptions">
-                            <label class="possibleOption">
-                                <input type="radio" name="question_${i}" value="${q.optionB}">
-                                <span class="possibleOptionText">B. ${q.optionB}</span>
-                            </label>
-                        </div>
-                        <div class="questionOptions">
-                            <label class="possibleOption">
-                                <input type="radio" name="question_${i}" value="${q.optionC}">
-                                <span class="possibleOptionText">C. ${q.optionC}</span>
-                            </label>
-                        </div>
-                        <div class="questionOptions">
-                            <label class="possibleOption">
-                                <input type="radio" name="question_${i}" value="${q.optionD}">
-                                <span class="possibleOptionText">D. ${q.optionD}</span>
-                            </label>
-                        </div>
+                        ${optionsHTML}
                     `;
                     
                     if (loadingZone) {
