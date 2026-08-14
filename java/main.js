@@ -811,7 +811,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ANALYTICS STUFF
     var overallScoreDisplay = document.getElementById('overallScoreDisplay')
     if (overallScoreDisplay) {
-        var analyticsSpreadsheet = 'https://script.google.com/macros/s/AKfycby3CXXQCYVvMmtlM5HDv7dKAjN4DdcigshVDoGr_rtj6zY0kZSO1YbMghmsDd6v5I4r/exec';
+        var analyticsSpreadsheet = 'https://script.google.com/macros/s/AKfycbxqKlWwZ6oQ7U93HeXjvfxisnRUFkde0p7BmMiAJO9T8-ftVJolFm-qMGaHyyiIlGxG/exec';
         var idNumber = localStorage.getItem('activeHubID');
         if (!idNumber) {
             idNumber = "You aren't logged in!"
@@ -931,55 +931,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
-
-    // MASTER ANALYTICS SHEET (FINALLY I FIXED IT AHAHAHHAHAHAHAH)
-    var analyticsWebAppURL = "https://script.google.com/macros/s/AKfycbxmu1Jtdh5Rt6WcMPjFKz6u6KEtBckpU7gAPvcv6tw-Cwe1yN1XrTidqUN8xCPKGcq65A/exec";
-    var activeHubID = localStorage.getItem('activeHubID');
-
-    if (activeHubID) {
-    fetch(`${analyticsWebAppURL}?id=${encodeURIComponent(activeHubID)}`, {
-        method: "GET",
-        redirect: "follow"
-    })
-        .then(response => {
-        if (!response.ok) throw new Error("Network response was not ok");
-            return response.json();
-        })
-        .then(data => {
-            console.log("Analytics Data Received:", data);
-
-        if (data.result === 'success') {
-            if (data.individual) {
-                const ind = data.individual;
-                const setElem = (id, val) => {
-                    const el = document.getElementById(id);
-                    if (el) el.textContent = val !== undefined && val !== "N/A" ? val + "%" : "N/A";
-            };
-
-            setElem('artAverage', ind["Art Avg"]);
-            setElem('econAverage', ind["Econ Avg"]);
-            setElem('litAverage', ind["Lit Avg"]);
-            setElem('mathAverage', ind["Math Avg"]);
-            setElem('musicAverage', ind["Music Avg"]);
-            setElem('sciAverage', ind["Sci Avg"]);
-            setElem('socsciAverage', ind["SocSci Avg"]);
-            setElem('totalAverage', ind["Overall Avg Score"]);
-            } else {
-                console.warn("No individual data found matching LoginID:", activeHubID);
-            }
-
-            if (data.team && document.getElementById('overallScoreDisplay')) {
-                document.getElementById('overallScoreDisplay').textContent = 
-                data.team["Team Overall Avg Score"] ? data.team["Team Overall Avg Score"] + "%" : "N/A";
-            }
-        }
-        })
-        .catch(err => console.error("Error fetching analytics:", err));
-    } else {
-        console.warn("No activeHubID found in localStorage.");
-    }
-
-   
 
     // LOGIN STUFF
     var loginButton = document.getElementById('loginButton');

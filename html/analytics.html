@@ -60,146 +60,118 @@
                 </section>
 
                 <!-- Subject Prediction -->
+                <!-- Subject Prediction -->
                 <section class="subjectsPredicted">
                     <h3>Projected By Subject</h3>
                     <table>
-                        <tr>
-                            <th>Subject</th>
-                            <th>Average Test Score</th>
-                            <th>Projected Score</th>
-                            <th>Confidence</th>
-                            <th>Bar</th>
-                        </tr>
-
-                        <tr>
-                            <th>Art</th>
-                            <td id="artAverage"></td>
-                            <td id="artProjection"></td>
-                            <td id="artConfidence"></td>
-                            <td>
-                                <div class="progressBar"><div class="progressBarFilled" id="artBar"><span class="progressBarText"></span></div></div>
-                            </td>
-                            
-                        </tr>
-
-                        <tr>
-                            <th>Economics</th>
-                            <td id="econAverage"></td>
-                            <td id="econProjection"></td>
-                            <td id="econConfidence"></td>
-                            <td>
-                                <div class="progressBar"><div class="progressBarFilled" id="econBar"><span class="progressBarText"></span></div></div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th>Literature</th>
-                            <td id="litAverage"></td>
-                            <td id="litProjection"></td>
-                            <td id="litConfidence"></td>
-                            <td>
-                                <div class="progressBar"><div class="progressBarFilled" id="litBar"><span class="progressBarText"></span></div></div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th>Math</th>
-                            <td id="mathAverage"></td>
-                            <td id="mathProjection"></td>
-                            <td id="mathConfidence"></td>
-                            <td>
-                                <div class="progressBar"><div class="progressBarFilled" id="mathBar"><span class="progressBarText"></span></div></div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th>Music</th>
-                            <td id="musicAverage"></td>
-                            <td id="musicProjection"></td>
-                            <td id="musicConfidence"></td>
-                            <td>
-                                <div class="progressBar"><div class="progressBarFilled" id="musicBar"><span class="progressBarText"></span></div></div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th>Science</th>
-                            <td id="sciAverage"></td>
-                            <td id="sciProjection"></td>
-                            <td id="sciConfidence"></td>
-                            <td>
-                                <div class="progressBar"><div class="progressBarFilled" id="sciBar"><span class="progressBarText"></span></div></div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th>Social Science</th>
-                            <td id="socsciAverage"></td>
-                            <td id="socsciProjection"></td>
-                            <td id="socsciConfidence"></td>
-                            <td>
-                                <div class="progressBar"><div class="progressBarFilled" id="socsciBar"><span class="progressBarText"></span></div></div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th>Essay</th>
-                            <td id="essayAverage"></td>
-                            <td id="essayProjection"></td>
-                            <td id="essayConfidence"></td>
-                            <td>
-                                <div class="progressBar"><div class="progressBarFilled" id="essayBar"><span class="progressBarText"></span></div></div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th>Interview</th>
-                            <td id="interviewAverage"></td>
-                            <td id="interviewProjection"></td>
-                            <td id="interviewConfidence"></td>
-                            <td>
-                                <div class="progressBar"><div class="progressBarFilled" id="interviewBar"><span class="progressBarText"></span></div></div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th>Speech</th>
-                            <td id="speechAverage"></td>
-                            <td id="speechProjection"></td>
-                            <td id="speechConfidence"></td>
-                            <td>
-                                <div class="progressBar"><div class="progressBarFilled" id="speechBar"><span class="progressBarText"></span></div></div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <th>Total</th>
-                            <td id="totalAverage"></td>
-                            <td id="totalProjection"></td>
-                            <td id="totalConfidence"></td>
-                            <td>
-                                <div class="progressBar"><div class="progressBarFilled" id="totalBar"><span class="progressBarText"></span></div></div>
-                            </td>
-                        </tr>
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Average Test Score</th>
+                                <th>Projected Score</th>
+                                <th>Confidence</th>
+                                <th>Bar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Art</th>
+                                <td id="artAverage">N/A</td>
+                                <td id="artProjection">N/A</td>
+                                <td id="artConfidence">--</td>
+                                <td><div class="progressBar"><div class="progressBarFilled" id="artBar"></div></div></td>
+                            </tr>
+                            <tr>
+                                <th>Economics</th>
+                                <td id="econAverage">N/A</td>
+                                <td id="econProjection">N/A</td>
+                                <td id="econConfidence">--</td>
+                                <td><div class="progressBar"><div class="progressBarFilled" id="econBar"></div></div></td>
+                            </tr>
+                            <tr>
+                                <th>Literature</th>
+                                <td id="litAverage">N/A</td>
+                                <td id="litProjection">N/A</td>
+                                <td id="litConfidence">--</td>
+                                <td><div class="progressBar"><div class="progressBarFilled" id="litBar"></div></div></td>
+                            </tr>
+                            <tr>
+                                <th>Math</th>
+                                <td id="mathAverage">N/A</td>
+                                <td id="mathProjection">N/A</td>
+                                <td id="mathConfidence">--</td>
+                                <td><div class="progressBar"><div class="progressBarFilled" id="mathBar"></div></div></td>
+                            </tr>
+                            <tr>
+                                <th>Music</th>
+                                <td id="musicAverage">N/A</td>
+                                <td id="musicProjection">N/A</td>
+                                <td id="musicConfidence">--</td>
+                                <td><div class="progressBar"><div class="progressBarFilled" id="musicBar"></div></div></td>
+                            </tr>
+                            <tr>
+                                <th>Science</th>
+                                <td id="sciAverage">N/A</td>
+                                <td id="sciProjection">N/A</td>
+                                <td id="sciConfidence">--</td>
+                                <td><div class="progressBar"><div class="progressBarFilled" id="sciBar"></div></div></td>
+                            </tr>
+                            <tr>
+                                <th>Social Science</th>
+                                <td id="socsciAverage">N/A</td>
+                                <td id="socsciProjection">N/A</td>
+                                <td id="socsciConfidence">--</td>
+                                <td><div class="progressBar"><div class="progressBarFilled" id="socsciBar"></div></div></td>
+                            </tr>
+                            <tr>
+                                <th>Essay</th>
+                                <td id="essayAverage">N/A</td>
+                                <td id="essayProjection">N/A</td>
+                                <td id="essayConfidence">--</td>
+                                <td><div class="progressBar"><div class="progressBarFilled" id="essayBar"></div></div></td>
+                            </tr>
+                            <tr>
+                                <th>Interview</th>
+                                <td id="interviewAverage">N/A</td>
+                                <td id="interviewProjection">N/A</td>
+                                <td id="interviewConfidence">--</td>
+                                <td><div class="progressBar"><div class="progressBarFilled" id="interviewBar"></div></div></td>
+                            </tr>
+                            <tr>
+                                <th>Speech</th>
+                                <td id="speechAverage">N/A</td>
+                                <td id="speechProjection">N/A</td>
+                                <td id="speechConfidence">--</td>
+                                <td><div class="progressBar"><div class="progressBarFilled" id="speechBar"></div></div></td>
+                            </tr>
+                            <tr>
+                                <th>Total</th>
+                                <td id="totalAverage">N/A</td>
+                                <td id="totalProjection">N/A</td>
+                                <td id="totalConfidence">--</td>
+                                <td><div class="progressBar"><div class="progressBarFilled" id="totalBar"></div></div></td>
+                            </tr>
+                        </tbody>
                     </table>
-
-
-
                 </section>
 
                 <!-- Testing Data -->
                 <section class="testData">
                     <h3>Recent Test Data</h3>
                     <table id="recentTestTable">
-                        <tr>
-                            <th>Subject</th>
-                            <th>Section</th>
-                            <th>Test Type</th>
-                            <th>Score</th>
-                            <th>Date</th>
-                        </tr>
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Section</th>
+                                <th>Test Type</th>
+                                <th>Score</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dynamic Rows Injected via main.js -->
+                        </tbody>
                     </table>
-
                 </section>
 
             </section>
