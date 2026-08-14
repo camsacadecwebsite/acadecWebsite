@@ -1009,4 +1009,73 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // More analytics stuff
+    var teamOverallScoreEl = document.getElementById('teamOverallScore');
+    if (teamOverallScoreEl) {
+        var teamAnalyticsURL = "https://script.google.com/macros/s/AKfycbyB28K2KbZeRo9UREQ5Q-cuK5OMm4WAyYtfY5MKUiLiWw5A7OHjX45ZmO4_GpzwY3oNqg/exec";
+
+        fetch(teamAnalyticsURL)
+            .then(function (res) {
+            return res.json();
+            })
+            .then(function (data) {
+            if (data.result !== 'success' || !data.team) {
+                console.error("Couldn't load team analytics:", data.message || data.error);
+                return;
+            }
+
+            var team = data.team;
+
+            function scaledAvg(rawValue) {
+                var num = parseFloat(rawValue);
+                if (isNaN(num)) return "N/A";
+                return Math.round(num * 10);
+            }
+
+            function setSubjectRow(prefix, teamKey) {
+                var avgEl = document.getElementById(prefix + 'Avg');
+                var barEl = document.getElementById(prefix + 'Bar');
+                var rawValue = team[teamKey];
+                var rawNum = parseFloat(rawValue);
+
+                if (avgEl) avgEl.textContent = scaledAvg(rawValue);
+                if (barEl) barEl.style.width = (isNaN(rawNum) ? 0 : rawNum) + "%";
+            }
+
+            setSubjectRow('teamArt', 'Team Art Avg');
+            setSubjectRow('teamEcon', 'Team Econ Avg');
+            setSubjectRow('teamLit', 'Team Lit Avg');
+            setSubjectRow('teamMath', 'Team Math Avg');
+            setSubjectRow('teamMusic', 'Team Music Avg');
+            setSubjectRow('teamSci', 'Team Sci Avg');
+            setSubjectRow('teamSocsci', 'Team Socsci Avg');
+            setSubjectRow('teamEssay', 'Team Essay Avg');
+            setSubjectRow('teamInterview', 'Team Interview Avg');
+            setSubjectRow('teamSpeech', 'Team Speech Avg');
+
+            var overallRaw = team['Team Overall Avg Score'];
+            var overallNum = parseFloat(overallRaw);
+            teamOverallScoreEl.textContent = scaledAvg(overallRaw);
+            var overallBarEl = document.getElementById('teamOverallBar');
+            if (overallBarEl) overallBarEl.style.width = (isNaN(overallNum) ? 0 : overallNum) + "%";
+
+            var ids = [
+                'teamStrength1', 'teamStrength2', 'teamStrength3',
+                'teamWeakness1', 'teamWeakness2', 'teamWeakness3'
+            ];
+            var keys = [
+                'Team Top Strength 1', 'Team Top Strength 2', 'Team Top Strength 3',
+                'Team Top Weakness 1', 'Team Top Weakness 2', 'Team Top Weakness 3'
+            ];
+
+            for (var i = 0; i < ids.length; i++) {
+                var el = document.getElementById(ids[i]);
+                if (el) el.textContent = team[keys[i]] || 'N/A';
+            }
+            })
+            .catch(function (err) {
+            console.error("Team analytics fetch failed:", err);
+            });
+    }
+
 });

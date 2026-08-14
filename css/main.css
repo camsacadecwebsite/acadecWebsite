@@ -197,6 +197,11 @@ main {
     text-align: center;
 }
 
+.projectedOverallWithoutBorder {
+    text-align: center;
+
+}
+
 .subjectsPredicted, .testData {
     font-size: 1.05rem;
     color: #1a1a1a;
@@ -215,10 +220,22 @@ main {
     
 }
 
+.projectedOverallWithoutBorder h2 {
+    margin-bottom: 12px;
+
+}
+
 .projectedOverall h1 {
     color: #0c5fcb;
     font-weight: 800;
     font-size: 3rem;
+}
+
+.projectedOverallWithoutBorder h1 {
+    color: #0c5fcb;
+    font-weight: 800;
+    font-size: 3rem;
+
 }
 
 /* Analytics Table */
