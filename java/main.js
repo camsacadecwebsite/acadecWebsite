@@ -51,8 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function checkUser(passwordInput) {
         const processCodeButton = document.getElementById('loginSubmitButton');
         if (processCodeButton) {
-            processCodeButton.distabled = true;
-            processCodeButton.textContext = "Verifying your password...."
+            processCodeButton.disabled = true;
+            processCodeButton.textContent = "Verifying your password...."
         }
 
 
@@ -811,9 +811,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // ANALYTICS STUFF
     var overallScoreDisplay = document.getElementById('overallScoreDisplay')
     if (overallScoreDisplay) {
-        var analyticsSpreadsheet = 'https://script.google.com/macros/s/AKfycbxqKlWwZ6oQ7U93HeXjvfxisnRUFkde0p7BmMiAJO9T8-ftVJolFm-qMGaHyyiIlGxG/exec';
+        // Acadec Analytics Transfer to Page
+        var analyticsSpreadsheet = 'https://script.google.com/macros/s/AKfycbzJlk4U5ofV4aDx0lSQUplY218Q-KT5KgIHq03qKj00WiIq_oCSg4hgXGe-use0YtWL/exec';
         var idNumber = localStorage.getItem('activeHubID');
+
         if (!idNumber) {
+            overallScoreDisplay.textContent = "--"
+            showAlert("You aren't logged in, so you can't view analytics!")
             idNumber = "You aren't logged in!"
         }
 
@@ -826,7 +830,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(function(data) {
             console.log(data);
 
-            if (data.result !== 'success') {
+            if (data.result !== 'success' || !data.projected) {
                 console.log("The analytics stuff isn't super hot rn");
                 console.log(data.error); // Debugging stuff
                 return;
@@ -979,7 +983,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     loginBox.innerHTML = '<p style="margin: 0; text-align: center;">You logged out :D</p>';
                     
                     localStorage.removeItem('activeHubUser');
-                    localStorage.removeItem('activHubID');
+                    localStorage.removeItem('activeHubID');
                     setTimeout(function() {
                         window.location.reload();
                     }, 1200);
@@ -1012,7 +1016,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // More analytics stuff
     var teamOverallScoreEl = document.getElementById('teamOverallScore');
     if (teamOverallScoreEl) {
-        var teamAnalyticsURL = "https://script.google.com/macros/s/AKfycbyB28K2KbZeRo9UREQ5Q-cuK5OMm4WAyYtfY5MKUiLiWw5A7OHjX45ZmO4_GpzwY3oNqg/exec";
+        // Acadec analytics code only page
+        var teamAnalyticsURL = "https://script.google.com/macros/s/AKfycbxyh7_hr-UP4GnMptrUXudFpZ2cxz4JOqJBCDtKsKJZyqxJma2I0WS20TyNf-rkJ0UOuA/exec";
 
         fetch(teamAnalyticsURL)
             .then(function (res) {
