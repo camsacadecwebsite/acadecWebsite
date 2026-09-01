@@ -259,6 +259,16 @@ table td {
     border-bottom: 1px solid #f0f2f5;
 }
 
+/* random stuff i added for coming soon stuff (which is a lot now that i think about it fah) */
+.comingSoonText {
+    float: right;
+    text-align: right;
+    margin-left: 15px;
+    margin-bottom: 16px;
+    color: #0c5fcb;
+    font-size: 1.05rem;
+}
+
 /* Progress Bar for Analytics */
 .progressBar {
     width: 150px;

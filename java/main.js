@@ -242,12 +242,10 @@ document.addEventListener('DOMContentLoaded', () => {
         var loggedInUser = localStorage.getItem('activeHubUser');
         var activeHubID = localStorage.getItem('activeHubID');
         var submitButton = document.getElementById('submitForm');
-
-        let lastCheckin = null;
-        if (activeHubID) {
-            const storageKey = `lastCheckInDate_${activeHubID}`;
-            lastCheckin = localStorage.getItem(storageKey);
-        }
+        
+        // Claude bug fix
+        const storageKey = activeHubID ? `lastCheckInDate_${activeHubID}` : null;
+        let lastCheckin = storageKey ? localStorage.getItem(storageKey) : null;
 
         function getLastSunday() {
             var date = new Date();
@@ -340,37 +338,44 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // SEND EVERYTHING TO SPREADSHEET
-            const spreadsheetLink = 'https://script.google.com/macros/s/AKfycbxCHboRJZTaDNygyE45tZhe1q4z4OYHuB7zruVa4Ag9jTr-Y-rWc79VoPuP2l8ZqS9O/exec'; 
+            const spreadsheetLink = 'https://script.google.com/macros/s/AKfycbwz3o4ldKSGvoFnRWXFFmicc3p-jnx3RwqxwcwH3giG-c2prmuzRcjkviN_mNDNr3BkCw/exec'; 
 
             fetch(spreadsheetLink, {
                 method: 'POST',
                 body: formData
             })
             .then(response => response.json())
-            .then(data => {
-                if (data.result === 'success') {
-                    localStorage.setItem('lastCheckInDate', Date.now().toString());
-                    showAlert("You have successfully submitted!")
-                    if (submitButton) {
-                        submitButton.disabled = true;
-                    }
-                    form.reset();
-                    if (submitButton) {
-                        submitButton.disabled = false;
-                    }
-                    document.getElementById('addPracticeTestSection').innerHTML = ''; 
-                }
+            .then(data => { // Claude bug fix
+                  if (data.result === 'success') {
+                       if (storageKey) {
+                           localStorage.setItem(storageKey, Date.now().toString());
+                       }
+                       showAlert("You have successfully submitted!")
+                       if (submitButton) {
+                           submitButton.disabled = true;
+                       }
+                       form.reset();
+                       document.getElementById('addPracticeTestSection').innerHTML = '';
+                  } else if (data.error === 'duplicate') {
+                       if (storageKey) {
+                           localStorage.setItem(storageKey, Date.now().toString());
+                       }
+                       showAlert("You already submitted your check-in for this week!");
+                       if (submitButton) {
+                           submitButton.disabled = true;
+                       }
+                  }
             })
             .catch(err => {
                 console.error(err);
                 showAlert("Submission error. Please try again.");
             })
-            .finally(() => {
-                if (submitButton && !localStorage.getItem('lastCheckinDate')) {
-                    submitButton.disabled = false;
-                    submitButton.textContent = "Submit Form";
-                }
-            });
+            .finally(() => { // Claude bug fix
+            if (submitButton && !(storageKey && localStorage.getItem(storageKey))) {
+                submitButton.disabled = false;
+                submitButton.textContent = "Submit Form";
+            }
+        });
         });
     }
 
@@ -435,6 +440,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // STUFF FOR PRACTICE TEST
     const startTestButton = document.getElementById('startTestButton');
+    const practiceTestFormGuard = document.getElementById('practiceTestForm');
+    if (practiceTestFormGuard) { // Guard stuff (Claude)
+        practiceTestFormGuard.addEventListener('submit', (event) => {
+            event.preventDefault();
+        });
+    }
     if (startTestButton) {
         startTestButton.addEventListener('click', () => {
 
@@ -522,10 +533,11 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(function(data) {
 
                 // If you can't load the question bank in
-                if (data.result !== 'success') {
+                if (data.result !== 'success' || !Array.isArray(data.questions)) {
                     if (statusText) {
                         statusText.textContent = 'The question bank is lowkey cooked';
                     } 
+                    showAlert('The question bank still lowkey cooked, try refreshing.');
                     return;
                 }
 
@@ -586,6 +598,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (statusText) {
                         statusText.textContent = `No questions in that section, either it doesn't exist or I'm working on it.`;
                     }
+                    showAlert("No questions found for that combination, try a different one.")
                     return;
                 }
 
@@ -667,6 +680,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (statusText) {
                     statusText.textContent = 'Either the network aint working or my code isnt. I dont know.';
                 }
+                showAlert("Either the network aint working or my code isnt. I dont know.")
             });
         
         // Finishing the test
@@ -796,6 +810,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(err => {
                 console.error(err);
+                showAlert("Couldn't submit ur work");
                 if (statusText) {
                     statusText.textContent = ('Your network got cooked, sorry :(');
                 }
@@ -838,66 +853,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Overall Projected Table
             var projectedAnalyticsData = data.projected;
-            overallScoreDisplay.textContent = projectedAnalyticsData.total.proj;
 
-            document.getElementById('artAverage').textContent = projectedAnalyticsData.art.avg;
-            document.getElementById('artProjection').textContent = projectedAnalyticsData.art.proj;
-            document.getElementById('artConfidence').textContent = projectedAnalyticsData.art.conf + "/10";
-            document.getElementById('artBar').style.width = projectedAnalyticsData.art.bar + "%";
+            var subjectFields = ['art', 'econ', 'lit', 'math', 'music', 'sci', 'socsci', 'essay', 'interview', 'speech', 'total'];
 
-            document.getElementById('econAverage').textContent = projectedAnalyticsData.econ.avg;
-            document.getElementById('econProjection').textContent = projectedAnalyticsData.econ.proj;
-            document.getElementById('econConfidence').textContent = projectedAnalyticsData.econ.conf + "/10";
-            document.getElementById('econBar').style.width = projectedAnalyticsData.econ.bar + "%";
+            var totalStats = projectedAnalyticsData.total || {};
+            overallScoreDisplay.textContent = totalStats.proj !== undefined ? totalStats.proj : 'N/A';
+            
+            // Claude bug fix
+            subjectFields.forEach(function(key) {
+                    var stats = projectedAnalyticsData[key] || {};
+                    var avgEl = document.getElementById(key + 'Average');
+                    var projEl = document.getElementById(key + 'Projection');
+                    var confEl = document.getElementById(key + 'Confidence');
+                    var barEl = document.getElementById(key + 'Bar');
 
-            document.getElementById('litAverage').textContent = projectedAnalyticsData.lit.avg;
-            document.getElementById('litProjection').textContent = projectedAnalyticsData.lit.proj;
-            document.getElementById('litConfidence').textContent = projectedAnalyticsData.lit.conf + "/10";
-            document.getElementById('litBar').style.width = projectedAnalyticsData.lit.bar + "%";
-
-            document.getElementById('mathAverage').textContent = projectedAnalyticsData.math.avg;
-            document.getElementById('mathProjection').textContent = projectedAnalyticsData.math.proj;
-            document.getElementById('mathConfidence').textContent = projectedAnalyticsData.math.conf + "/10";
-            document.getElementById('mathBar').style.width = projectedAnalyticsData.math.bar + "%";
-
-            document.getElementById('musicAverage').textContent = projectedAnalyticsData.music.avg;
-            document.getElementById('musicProjection').textContent = projectedAnalyticsData.music.proj;
-            document.getElementById('musicConfidence').textContent = projectedAnalyticsData.music.conf + "/10";
-            document.getElementById('musicBar').style.width = projectedAnalyticsData.music.bar + "%";
-
-            document.getElementById('sciAverage').textContent = projectedAnalyticsData.sci.avg;
-            document.getElementById('sciProjection').textContent = projectedAnalyticsData.sci.proj;
-            document.getElementById('sciConfidence').textContent = projectedAnalyticsData.sci.conf + "/10";
-            document.getElementById('sciBar').style.width = projectedAnalyticsData.sci.bar + "%";
-
-            document.getElementById('socsciAverage').textContent = projectedAnalyticsData.socsci.avg;
-            document.getElementById('socsciProjection').textContent = projectedAnalyticsData.socsci.proj;
-            document.getElementById('socsciConfidence').textContent = projectedAnalyticsData.socsci.conf + "/10";
-            document.getElementById('socsciBar').style.width = projectedAnalyticsData.socsci.bar + "%";
-
-            document.getElementById('essayAverage').textContent = projectedAnalyticsData.essay.avg;
-            document.getElementById('essayProjection').textContent = projectedAnalyticsData.essay.proj;
-            document.getElementById('essayConfidence').textContent = projectedAnalyticsData.essay.conf + "/10";
-            document.getElementById('essayBar').style.width = projectedAnalyticsData.essay.bar + "%";
-
-            document.getElementById('interviewAverage').textContent = projectedAnalyticsData.interview.avg;
-            document.getElementById('interviewProjection').textContent = projectedAnalyticsData.interview.proj;
-            document.getElementById('interviewConfidence').textContent = projectedAnalyticsData.interview.conf + "/10";
-            document.getElementById('interviewBar').style.width = projectedAnalyticsData.interview.bar + "%";
-
-            document.getElementById('speechAverage').textContent = projectedAnalyticsData.speech.avg;
-            document.getElementById('speechProjection').textContent = projectedAnalyticsData.speech.proj;
-            document.getElementById('speechConfidence').textContent = projectedAnalyticsData.speech.conf + "/10";
-            document.getElementById('speechBar').style.width = projectedAnalyticsData.speech.bar + "%";
-
-            document.getElementById('totalAverage').textContent = projectedAnalyticsData.total.avg;
-            document.getElementById('totalProjection').textContent = projectedAnalyticsData.total.proj;
-            document.getElementById('totalConfidence').textContent = projectedAnalyticsData.total.conf + "/10";
-            document.getElementById('totalBar').style.width = projectedAnalyticsData.total.bar + "%";
+                    if (avgEl) avgEl.textContent = stats.avg !== undefined ? stats.avg : 'N/A';
+                    if (projEl) projEl.textContent = stats.proj !== undefined ? stats.proj : 'N/A';
+                    if (confEl) confEl.textContent = (stats.conf !== undefined ? stats.conf : 'N/A') + "/10";
+                    if (barEl) barEl.style.width = (stats.bar !== undefined ? stats.bar : 0) + "%";
+            });
+            
 
             // Recent Tests Table
             var recentTestTable = document.getElementById('recentTestTable');
             var tests = data.recentTests;
+
+            if (!recentTestTable) {
+                return;
+            }
 
             if (tests[0]) {
                 var row0 = document.createElement('tr');
@@ -926,10 +909,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         })
         .catch(err => {
-            console.error(err);
-            if (statusText) {
-                    statusText.textContent = 'Either the network aint working or my code isnt. I dont know.';
-            }
+             console.error(err);
+             overallScoreDisplay.textContent = "--";
+             showAlert("Couldn't load your analytics right now — check your connection and try refreshing.");
         });
         
 
@@ -1017,7 +999,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var teamOverallScoreEl = document.getElementById('teamOverallScore');
     if (teamOverallScoreEl) {
         // Acadec analytics code only page
-        var teamAnalyticsURL = "https://script.google.com/macros/s/AKfycbxyh7_hr-UP4GnMptrUXudFpZ2cxz4JOqJBCDtKsKJZyqxJma2I0WS20TyNf-rkJ0UOuA/exec";
+        var teamAnalyticsURL = "https://script.google.com/macros/s/AKfycbydlsQ1he4Bx-1GVyaMCgtSrlVm5s6Jsx1gN_ImYIr93YacbuEKUHNFawFPkHtQHD0JEw/exec";
 
         fetch(teamAnalyticsURL)
             .then(function (res) {
@@ -1026,6 +1008,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(function (data) {
             if (data.result !== 'success' || !data.team) {
                 console.error("Couldn't load team analytics:", data.message || data.error);
+                showAlert("Team Analytics data isn't available rn");
                 return;
             }
 
@@ -1079,7 +1062,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             })
             .catch(function (err) {
-            console.error("Team analytics fetch failed:", err);
+                console.error("Team analytics fetch failed:", err);
+                showAlert("Couldn't load team analytics");
             });
     }
 
