@@ -264,9 +264,9 @@ table td {
     float: right;
     text-align: right;
     margin-left: 15px;
-    margin-bottom: 16px;
     color: #0c5fcb;
     font-size: 1.05rem;
+    margin-bottom: 16px;
 }
 
 /* Progress Bar for Analytics */
@@ -486,6 +486,11 @@ tr:nth-of-type(12) .progressBarFilled { width: 90%; }
     }
 }
 
+.subjectHeading p {
+    font-size: 0.9rem;
+    line-height: 24px;
+}
+
 /* Subject Big Boxes */
 .subjectHeading, .notes, .quizletBlock, .gameBlock, .analyticsMain {
     background: #ffffff;
@@ -499,7 +504,7 @@ tr:nth-of-type(12) .progressBarFilled { width: 90%; }
     font-size: 1.1rem;
     color: #666666;
     margin-bottom: 8px;
-    line-height: 1.0;
+    line-height: 1.2;
 }
 
 /* Subject Small Boxes */
@@ -566,11 +571,12 @@ tr:nth-of-type(12) .progressBarFilled { width: 90%; }
 }
 
 /* Formatting links in notes box */
-.notesLink a {
+.notesLink a, .comingSoonText {
     float: right; /* Makes links go to the right */
     text-align: right;
     margin-left: 15px;
     margin-bottom: 16px;
+
     
 }
 
@@ -580,8 +586,20 @@ tr:nth-of-type(12) .progressBarFilled { width: 90%; }
     clear: both;
 }
 
+.notesLink > *:last-child {
+    margin-bottom: 0;
+}
+
+.lastResource {
+    margin-bottom: 0;
+}
+
 /* Remove bottom spacing from each note box */
 .notesLink span:last-of-type ~ a {
+    margin-bottom: 0;
+}
+
+.comingSoonText span:last-of-type ~ a {
     margin-bottom: 0;
 }
 
