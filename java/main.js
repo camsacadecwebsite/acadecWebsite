@@ -1,3 +1,9 @@
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        window.location.reload();
+    }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
 
     // Non ugly alerts code
@@ -46,6 +52,18 @@ document.addEventListener('DOMContentLoaded', () => {
         alertBox.appendChild(closeButton);
         overlay.appendChild(alertBox);
         document.body.appendChild(overlay); 
+    }
+
+    // make sure nothing gets leaked
+    const dashboardRedirect = document.body.getAttribute('requiresLogin');
+    if (dashboardRedirect) {
+        const loggedInCheck = localStorage.getItem('activeHubUser');
+        if (!loggedInCheck) {
+            showAlert("Sorry, you aren't logged in, so you can't view stuff.");
+            setTimeout(function() {
+                window.location.href = dashboardRedirect;
+            }, 1500);
+        }
     }
 
     function checkUser(passwordInput) {
