@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
 
-        const passwordURL = 'https://script.google.com/macros/s/AKfycbyeP7xRa9NJ6mUWKB44wE_x_jCgv6sxLMyOiJZsYeMpXywcTE-YaBqrezhuZQBRAxd9/exec';
+        const passwordURL = 'https://script.google.com/macros/s/AKfycby77vkTXl9lSyR9yk4uy3i0mLVazuKGSPNr4FLmi85OAqV4PIo4lYf9pPkXNeTrYEgj/exec';
   
         const formData = new FormData();
         formData.append('password', passwordInput);
