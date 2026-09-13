@@ -845,7 +845,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var overallScoreDisplay = document.getElementById('overallScoreDisplay')
     if (overallScoreDisplay) {
         // Acadec Analytics Transfer to Page
-        var analyticsSpreadsheet = 'https://script.google.com/macros/s/AKfycbzJlk4U5ofV4aDx0lSQUplY218Q-KT5KgIHq03qKj00WiIq_oCSg4hgXGe-use0YtWL/exec';
+        var analyticsSpreadsheet = 'https://script.google.com/macros/s/AKfycbyYfl-dvkzzVdv5Wlh2rpWbWR-LjTSPFxtEZEGuvnPMaXD_O94ZQGvuBVK8FI0NREyL/exec';
         var idNumber = localStorage.getItem('activeHubID');
 
         if (!idNumber) {
